@@ -136,9 +136,5 @@ resource "google_container_cluster" "primary" {
     daily_maintenance_window {
       start_time = "04:00" # GMT
     }
-  }
-
-  network_policy {
-    enabled = true
-  }
+  }  
 }
