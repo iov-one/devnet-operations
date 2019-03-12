@@ -1,2 +1,3 @@
 variables.tf
 export_variables.sh
+.terraform/*

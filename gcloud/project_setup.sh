@@ -21,7 +21,7 @@ gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
   --role roles/owner
 
 # Add humans
-for n in ${EMAILS//;/}; do
+for n in ${EMAILS//;/ }; do
 gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
   --member user:${n} \
   --role roles/owner
@@ -44,13 +44,10 @@ terraform plan -state="$TF_STATE" -out "$TF_PLAN"
 # Apply the plan
 terraform apply -state-out="$TF_STATE" "$TF_PLAN"
 
-# enable pod security policy
-gcloud beta container clusters update $GCLOUD_PLATFORM --enable-pod-security-policy --zone europe-west1-b --project ${TF_VAR_gcloud_project}
-
 # Import credentials
 gcloud container clusters get-credentials $GCLOUD_PLATFORM --zone europe-west1-b --project ${TF_VAR_gcloud_project}
 
 # Set admin binding
-for n in ${ADMIN_EMAILS//;/}; ; do
+for n in ${ADMIN_EMAILS//;/}; do
     kubectl create clusterrolebinding cluster-admin-binding_${n} --clusterrole=cluster-admin --user=${n}@iov.one
 done
