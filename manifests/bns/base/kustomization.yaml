@@ -1,0 +1,15 @@
+resources:
+- bns-ingress.yaml
+- bns-validator.yaml
+configMapGenerator:
+- name: bns-tendermint-config
+  files: 
+  - config.toml
+- name: tm-bns-init-config
+  files: 
+  - genesis.json
+  - pub_key_nginx.conf
+  literals:
+  - validators=bns
+  - validator.power=10
+  - seeds=

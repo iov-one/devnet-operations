@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tendermint-bns
+spec:
+  rules:
+  - host: bns.zebrnet.iov.one
+    http:
+      paths:
+      - backend:
+          serviceName: bns
+          servicePort: 26657

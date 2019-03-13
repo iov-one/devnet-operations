@@ -1,0 +1,5 @@
+bases:
+  - ../base
+patchesStrategicMerge:
+  - bns-ingress.yaml
+  - bns-validator.yaml

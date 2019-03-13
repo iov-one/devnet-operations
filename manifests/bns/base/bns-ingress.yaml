@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tendermint-bns
+  annotations:
+    prometheus.io/probe: "true"
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/rate-limit: |-
+      extractorfunc: client.ip
+      rateset:
+        bns.example.com:
+          period: 3s
+          average: 3
+          burst: 6
+  labels:
+    app: bns-rpc-manual
+    component: rpc
+    traffic-type: public
+spec:
+  rules:
+  - host: bns.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: bns
+          servicePort: 26657    

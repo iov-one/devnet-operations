@@ -1,0 +1,321 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: bns
+  labels:
+    app: bns
+    component: validator
+spec:
+  ports:
+  - port: 26656
+    name: p2p
+  - port: 26657
+    name: rpc
+  - port: 9080
+    name: pub-key
+  selector:
+    app: bns
+    component: validator
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bns
+  labels:
+    app: bns
+    component: validator
+spec:
+  serviceName: bns  
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bns
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: bns
+        component: validator
+        clusterName: bns
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values: [bns]
+            topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 10
+      initContainers:
+      - name: tm-gen-validator
+        imagePullPolicy: IfNotPresent
+        image: iov1/tendermint:v0.29.1
+        env:
+        - name: TMHOME
+          value: /data/tendermint
+        command:
+          - bash
+          - "-c"
+        args:
+          - |
+            set -exo pipefail
+            if [ ! -f /data/tendermint/export/pub_key.json ]; then
+             mkdir -p /data/tendermint/export
+             mkdir -p /data/bns
+             tendermint init
+             cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+
+             # extract pub key and node_id for nginx
+             tendermint show_node_id > /data/tendermint/export/node_id
+             tendermint gen_validator > /data/tendermint/config/priv_validator.json
+             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" > /data/tendermint/export/pub_key.json
+            fi
+        volumeMounts:
+          - name: tmdir
+            mountPath: "/data"
+          - mountPath: /etc/tendermint/genesis.json
+            name: tm-initialization
+            subPath: genesis.json
+            readOnly: true
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      - name: bns-init
+        imagePullPolicy: IfNotPresent
+        image: iov1/bnsd:v0.12.0
+        command:
+        args:
+          - '-home=/data/tendermint'
+          - init
+          - '-i'
+        volumeMounts:
+          - name: tmdir
+            mountPath: "/data"
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      containers:
+      - name: tendermint
+        imagePullPolicy: IfNotPresent
+        image: iov1/tendermint:v0.29.1
+        ports:
+        - containerPort: 26656
+          name: p2p
+        - containerPort: 26657
+          name: rpc
+        env:
+        - name: SEEDS
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-init-config
+              key: seeds
+        - name: VALIDATOR_POWER
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-init-config
+              key: validator.power
+        - name: VALIDATORS
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-init-config
+              key: validators
+        - name: TMHOME
+          value: /data/tendermint
+        command:
+        - bash
+        - "-c"
+        - |
+          set -exo pipefail
+          fqdn_suffix=$(hostname -f | sed 's#[^.]*\.\(\)#\1#' | sed 's#[^.]*\.\(\)#\1#')
+          # create genesis
+          if [ ! -f ${TMHOME}/config/genesis_generated ]; then
+            rm -rf ${TMHOME}/tmp/
+            mkdir -p ${TMHOME}/tmp/
+            cp /etc/tendermint/genesis.json ${TMHOME}/tmp
+            # fill genesis file with validators
+            IFS=',' read -ra VALS_ARR <<< "$VALIDATORS"
+            for v in "${VALS_ARR[@]}"; do
+              # wait until validator generates priv/pub key pair
+              set +e
+
+              curl -s --fail "http://$v.$fqdn_suffix:9080/pub_key.json" > /dev/null
+              ERR=$?
+              while [ "$ERR" != 0 ]; do
+                sleep 5
+                curl -s --fail "http://$v.$fqdn_suffix:9080/pub_key.json" > /dev/null
+                ERR=$?
+              done
+              set -e
+
+              # add validator to genesis file along with its pub_key
+              curl -s "http://$v.$fqdn_suffix:9080/pub_key.json" | jq ". as \$k | {pub_key: \$k, power: \"$VALIDATOR_POWER\", name: \"$v\"}" > ${TMHOME}/tmp/pub_validator.json
+              cat ${TMHOME}/tmp/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/tmp/genesis_work && mv ${TMHOME}/tmp/genesis_work ${TMHOME}/tmp/genesis.json
+              rm ${TMHOME}/tmp/pub_validator.json
+            done
+            mv ${TMHOME}/tmp/genesis.json ${TMHOME}/config
+            touch ${TMHOME}/config/genesis_generated
+          fi
+
+          cp /etc/tendermint/config.toml ${TMHOME}/config
+
+          if [ -f /data/tendermint/config/addrbook.json ]; then
+            # Quick hack: deleting address book to fix stale IP addresses
+            rm -f ${TMHOME}/config/addrbook.json
+          fi
+
+          # construct seeds
+          IFS=',' read -ra SEEDS_ARR <<< "$SEEDS"
+          seeds=()
+          for s in "${SEEDS_ARR[@]}"; do
+            # wait until seed validators expose their node_id
+            set +e
+            curl -s --fail "http://$s.$fqdn_suffix:9080/node_id" > /dev/null
+            ERR=$?
+            while [ "$ERR" != 0 ]; do
+              sleep 2
+              curl -s --fail "http://$s.$fqdn_suffix:9080/node_id" > /dev/null
+              ERR=$?
+            done
+            set -e
+            # now get the data
+            node_id=`curl -s "http://$s.$fqdn_suffix:9080/node_id"`
+            seeds+=("tcp://$node_id@$s.$fqdn_suffix:26656")
+          done
+          seeds=$(IFS=','; echo "${seeds[*]}")
+
+          chmod -fR g-rwx /data/tendermint/data/
+          # wait for bov app started
+          while [ ! -S /socks/app.sock ]; do
+            sleep 1
+          done
+
+          exec tendermint node --p2p.persistent_peers="$seeds" \
+            --moniker="`hostname`" \
+            --log_level="p2p:info,state:info,*:error" \
+            --proxy_app="unix:///socks/app.sock"
+        volumeMounts:
+        - name: tmdir
+          mountPath: /data/tendermint
+          subPath: tendermint
+        - mountPath: /etc/tendermint/genesis.json
+          name: tm-initialization
+          subPath: genesis.json
+          readOnly: true
+        - mountPath: /etc/tendermint/config.toml
+          name: tm-configuration
+          subPath: config.toml
+          readOnly: true
+        - name: socksdir
+          mountPath: /socks
+        - name: tm-rw-volume
+          mountPath: /tmp
+        resources:
+          limits:
+            cpu: 1100m
+            memory: 4Gi
+          requests:
+            cpu: 750m
+            memory: 2Gi
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -o
+            - pipefail
+            - -ec
+            - 'curl -s --fail http://localhost:26657/status | jq --exit-status ".result.sync_info.catching_up==false"'
+          failureThreshold: 999999
+          periodSeconds: 20
+          initialDelaySeconds: 40
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -o
+            - pipefail
+            - -ec
+            - 'curl -s --fail http://localhost:26657/abci_info | jq --exit-status ".result.response"'
+          failureThreshold: 3
+          initialDelaySeconds: 40
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+      - name: bns
+        imagePullPolicy: IfNotPresent
+        image: iov1/bnsd:v0.12.0
+        args:
+          - '-home=/data/bns'
+          - start
+          - '-bind=unix:///socks/app.sock'
+        volumeMounts:
+        - name: socksdir
+          mountPath: /socks
+        - name: tmdir
+          mountPath: /data/bns
+          subPath: bns
+        resources:
+          limits:
+            cpu: 1100m
+            memory: 2.5Gi
+          requests:
+            cpu: 550m
+            memory: 512Mi
+      - name: pub-key
+        imagePullPolicy: IfNotPresent
+        image: nginx:1.15-alpine
+        ports:
+        - containerPort: 9080
+          name: pub-key
+        volumeMounts:
+        - name: tmdir
+          mountPath: /usr/share/nginx/
+          subPath: tendermint/export
+        - mountPath: /etc/nginx/nginx.conf
+          name: tm-initialization
+          subPath: pub_key_nginx.conf
+        - mountPath: /rw-volume
+          name: nginx-rw-volume
+        resources:
+          limits:
+            cpu: 15m
+            memory: 5Mi
+          requests:
+            cpu: 5m
+            memory: 3Mi
+      volumes:
+      - name: tm-initialization
+        configMap:
+          name: tm-bns-init-config
+      - name: tm-configuration
+        configMap:
+          name: bns-tendermint-config
+      - name: socksdir
+        emptyDir: {}
+      - name: tm-rw-volume
+        emptyDir: {}
+      - name: nginx-rw-volume
+        emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: tmdir
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: fast
+      resources:
+        requests:
+          storage: 30Gi
