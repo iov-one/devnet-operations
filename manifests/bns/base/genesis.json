@@ -1,6 +1,6 @@
 {
  "genesis_time": "2016-02-05T23:17:31.164Z",
- "chain_id": "bns-apollonet",
+ "chain_id": "bns-devnet",
  "validators": [],
  "consensus_params": {
    "block_size_params": {
