@@ -1,18 +1,12 @@
 # DevNet Operations
 Kubernetes manifest and Terraform operation files and doc.
 
-## We want:
-* Terraform for K8s project setup
-* Kustomize for multiple network support
-* All configs should go PR into master
-* Networks are defined as layers in subfolders
-* Aim for simplicity rather than security
-* Document the files and processes in the repo
+## Cluster setup
+Currently we support only Google Cloud setup via terraform
 
-## We don't want:
-* Long living branches
-* Credentials in repo
-* Features like disruption-budget, autoscaling, security policies
+### Prerequisites
+Tested with Terraform 0.11+, kubectl v1.11+ and gcloud SDK 209+ on OS X and Linux
+Google cloud billing account  
 
-## Assumptions:
-- We are not going to recreate an old network
+### Setup
+run `make variables` to set you up

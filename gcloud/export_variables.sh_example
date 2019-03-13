@@ -1,0 +1,9 @@
+# this needs to be customized according to your setup
+export TF_VAR_gcloud_project=yourcompany-devnet # gcloud project name
+export GCLOUD_PLATFORM=devnet # that would be your platform / kubernetes cluster name
+export GOOGLE_CLOUD_KEYFILE_JSON="your_desired_path/terraform-service-account.json" # this is where you want you terraform secret to be stored
+export TF_VAR_billing_account=your-billing-account # your gcloud billing account id
+export TF_STATE="your_desired_path/terraform.tfstate" # this is where your terraform state is going to be stored
+export TF_PLAN="your_desired_path/plan-1.0.plan" # this is where your terraform plan is going to be stored
+export EMAILS="account1@example.com;account2@example.com;account3@example.com" # users that need to have access to kubernetes cluster
+export ADMIN_EMAILS="account1@example.com;account2@example.com" # this is a subset of EMAILS for admin kubernetes access
