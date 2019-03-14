@@ -55,7 +55,7 @@ spec:
       initContainers:
       - name: tm-gen-validator
         imagePullPolicy: IfNotPresent
-        image: iov1/tendermint:v0.29.1
+        image: iov1/tendermint:0.25.0
         env:
         - name: TMHOME
           value: /data/tendermint
@@ -111,7 +111,7 @@ spec:
       containers:
       - name: tendermint
         imagePullPolicy: IfNotPresent
-        image: iov1/tendermint:v0.29.1
+        image: iov1/tendermint:0.25.0
         ports:
         - containerPort: 26656
           name: p2p

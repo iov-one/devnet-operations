@@ -3,3 +3,6 @@ bases:
 patchesStrategicMerge:
   - bns-ingress.yaml
   - bns-validator.yaml
+images:
+- name: iov1/tendermint
+  newTag: v0.29.1
