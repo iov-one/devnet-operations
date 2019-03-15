@@ -13,4 +13,6 @@ run
 kubectl create secret generic traefik-public-certs --from-file="$certPath/certificates/_.$baseDomain.crt" \
 --from-file="$certPath/certificates/_.$baseDomain.key"
 
+kubectl build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
+
 kustomize build ${manifestsPath}/bns/${networkName} | kubectl apply -f -
