@@ -7,6 +7,7 @@ Currently we support only Google Cloud setup via terraform
 ### Prerequisites
 Tested with Terraform 0.11+, kubectl v1.11+ and gcloud SDK 209+ on OS X and Linux  
 Google cloud billing account  
+Valid Go installation, tested with v1.11.1  
 
 ### Setup
 * Run `make variables` to set you up with sample `gcloud/export_variables.sh` and `gcloud/variables.tf`  
@@ -14,3 +15,10 @@ Google cloud billing account
 * Make sure all the generated paths like terraform plans/state and account are pointing to a secure place and not `/tmp`  
 * Run `make setup_cluster`
 * Enjoy your newly created Kubernetes cluster on Gcloud!
+
+## Deploying a testnet to a cluster
+
+
+
+## TODO: Acessing traefik console
+* Instead of complicating the setup with another ingress we'll just use port-forwarding for that. Shouldn't actually be used that often anyway

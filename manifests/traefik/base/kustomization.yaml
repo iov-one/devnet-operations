@@ -1,0 +1,4 @@
+resources:
+- traefik-endpoint.yaml
+- traefik-public.yaml
+- traefik-rbac.yaml

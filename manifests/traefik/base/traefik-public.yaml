@@ -1,0 +1,111 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: traefik-public
+  labels:
+    app: traefik-public
+    component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-public
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      labels:
+        app: traefik-public
+        component: controller
+    spec:
+      serviceAccountName: traefik-ingress
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - image: traefik:v1.7.4-alpine
+          name: traefik-public
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9080
+              name: http
+              protocol: TCP
+            - containerPort: 9443
+              name: https
+              protocol: TCP
+            - containerPort: 8080
+              name: internal
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: "/config"
+              readOnly: true
+            - mountPath: /etc/tls-certs
+              name: certs
+              readOnly: true
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          args:
+            - --api
+            - --ping
+            - --metrics.prometheus
+            - --kubernetes
+            - --logLevel=INFO
+            - --kubernetes.namespaces=default
+            - --kubernetes.labelselector=traffic-type=public
+            - --configfile=/config/traefik.toml
+          readinessProbe:
+            tcpSocket:
+              port: internal
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            failureThreshold: 1
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            tcpSocket:
+              port: internal
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          securityContext:
+            readOnlyRootFilesystem: true
+      volumes:
+      - name: certs
+        secret:
+          secretName: traefik-public-certs
+          defaultMode: 0400
+      - name: config
+        configMap:
+          name: traefik-public-conf
+          defaultMode: 0400
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-public-console
+  labels:
+    app: traefik-public
+    component: controller
+spec:
+  selector:
+    app: traefik-public
+  ports:
+    - port: 8080
+      name: internal

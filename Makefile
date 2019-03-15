@@ -11,6 +11,7 @@ setup_cluster:
 	@cd gcloud && ./project_setup.sh
 
 deps: 
-	# this only gets kustomize as other dependencies
+	# this only gets kustomize and lego as other dependencies
 	# are better installed in a platform-specific way
 	go get -u github.com/kubernetes-sigs/kustomize
+	go get -u github.com/go-acme/lego

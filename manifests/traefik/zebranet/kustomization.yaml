@@ -1,0 +1,6 @@
+bases:
+  - ../base
+configMapGenerator:
+- name: traefik-public-conf
+  files: 
+  - traefik.toml
