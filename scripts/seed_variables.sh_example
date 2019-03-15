@@ -1,0 +1,5 @@
+export CLOUDFLARE_EMAIL="your_email@example.com" # change to your cloudflare account email
+export CLOUDFLARE_API_KEY="your_api_key" # your cloudflare api key
+export baseDomain="example.com" # base domain for your devnet
+export certEmail="your_email@example.com" # an email you want to generate your certificate with
+export certPath="path/to/letsencrypt/creds/and/cert_storage" # this is a path to your letsencrypt credentials and certificate storage
