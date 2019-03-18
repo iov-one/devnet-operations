@@ -3,7 +3,7 @@
   value: bns.zebranet.iov.one
 - op: replace
   path: /metadata/annotations/traefik.ingress.kubernetes.io~1rate-limit
-  value: 
+  value: |-
       extractorfunc: client.ip
       rateset:
         bns.zebranet.iov.one:
