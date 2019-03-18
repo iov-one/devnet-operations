@@ -26,7 +26,6 @@ while [ "$IP" == "" ]; do
 done
 set -e
 
-ZONE_ID="81cd28da6edc47e3b688757f8466163e"; \
 EMAIL="$CLOUDFLARE_EMAIL"; \
 KEY="$CLOUDFLARE_API_KEY"; \
 DOMAIN="$ROOT_DOMAIN"; \
