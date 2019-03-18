@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: bns-faucet
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/rate-limit: |-
+      extractorfunc: client.ip
+      rateset:
+        bns-faucet.example.com:
+          period: 3s
+          average: 3
+          burst: 6
+  labels:
+    app: bns-faucet
+    component: api
+    traffic-type: public
+spec:
+  rules:
+  - host: bns-faucet.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: bns-faucet
+          servicePort: http

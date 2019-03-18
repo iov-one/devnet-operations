@@ -1,6 +1,9 @@
 resources:
+- bns-faucet-secret.yaml
 - bns-ingress.yaml
 - bns-validator.yaml
+- bns-faucet.yaml
+- bns-faucet-ingress.yaml
 configMapGenerator:
 - name: bns-tendermint-config
   files: 

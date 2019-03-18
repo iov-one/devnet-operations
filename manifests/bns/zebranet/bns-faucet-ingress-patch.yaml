@@ -1,0 +1,12 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: bns-faucet.zebranet.iov.one
+- op: replace
+  path: /metadata/annotations/traefik.ingress.kubernetes.io~1rate-limit
+  value: |-
+      extractorfunc: client.ip
+      rateset:
+        bns-faucet.zebranet.iov.one:
+          period: 3s  
+          average: 3
+          burst: 6
