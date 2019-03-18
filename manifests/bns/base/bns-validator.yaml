@@ -73,8 +73,10 @@ spec:
 
              # extract pub key and node_id for nginx
              tendermint show_node_id > /data/tendermint/export/node_id
-             tendermint gen_validator > /data/tendermint/config/priv_validator.json
-             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" > /data/tendermint/export/pub_key.json
+             tendermint gen_validator > /data/tendermint/config/priv_validator_work.json
+             cat /data/tendermint/config/priv_validator_work.json | jq ".Key" > /data/tendermint/config/priv_validator_key.json
+             cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
+             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" > /data/tendermint/export/pub_key.json
             fi
         volumeMounts:
           - name: tmdir
@@ -203,7 +205,7 @@ spec:
             sleep 1
           done
 
-          exec tendermint node --p2p.persistent_peers="$seeds" \
+          exec tendermint node \
             --moniker="`hostname`" \
             --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
@@ -315,7 +317,7 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
-      storageClassName: fast
+      storageClassName: standard
       resources:
         requests:
           storage: 30Gi
