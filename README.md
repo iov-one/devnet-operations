@@ -20,6 +20,7 @@ Valid Go installation, tested with v1.11.1
 * Make sure you add a faucet secret in manifests/${app_type}/bns-faucet-secret.yaml
 * Make sure you set up scripts/seed_variables.sh according to comments in seed_variables.sh_example
 * You will need to create your own overlay similar to manifests/${app_type}/zebranet
+* Run `make deps`
 * Run `make seed_cluster`
 * Enjoy your testnet!
 * p2p external ip can be looked up `kubectl get service bns-p2p`
