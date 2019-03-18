@@ -25,6 +25,10 @@ Valid Go installation, tested with v1.11.1
 * Enjoy your testnet!
 * p2p external ip can be looked up `kubectl get service bns-p2p`
 
+## (K)ustomizing things
+* A good starting point is to go through examples (here)[https://github.com/kubernetes-sigs/kustomize/tree/master/examples]
+* There are comments in `manifests/bns` base and zebranet kuztomization.yaml
+
 
 
 ## TODO: Acessing traefik console
