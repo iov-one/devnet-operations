@@ -1,9 +1,14 @@
+# a list of all the manifests required, make sure to add a file here if you add it to
+# this folder
 resources:
 - bns-faucet-secret.yaml
 - bns-ingress.yaml
 - bns-validator.yaml
 - bns-faucet.yaml
 - bns-faucet-ingress.yaml
+# generating config maps is as easy as specifying a filename for files and literals key=val
+# config names for files are automatically generated from their names
+# e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
 configMapGenerator:
 - name: bns-tendermint-config
   files: 

@@ -1,7 +1,11 @@
+# some info on bases and strategicMerge https://github.com/kubernetes-sigs/kustomize/blob/master/examples/helloWorld/README.md
 bases:
   - ../base
 patchesStrategicMerge:
   - bns-validator.yaml
+# some info on patches https://github.com/kubernetes-sigs/kustomize/blob/master/examples/jsonpatch.md
+# the idea here is that we target a certain entity defined earlier, by group, version, kind and name
+# and then specify a patch 
 patchesJson6902:
 - target:
     group: extensions
@@ -15,6 +19,9 @@ patchesJson6902:
     kind: Ingress
     name: bns-faucet
   path: bns-faucet-ingress-patch.yaml  
+# some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
+# images simply match every image in the manifest by name and then override
+# selected properties. you can also specify newName if you want to rename the image  
 images:
 - name: iov1/tendermint
   newTag: v0.29.1
