@@ -92,15 +92,13 @@ spec:
         args:
           - |
             set -exo pipefail
-            if [ ! -f /data/tendermint/export/pub_key.json ]; then
-             mkdir -p /data/tendermint/export
+            if [ ! -d ${TMHOME}/tmp ]; then
              mkdir -p /data/bns
              mkdir -p ${TMHOME}/tmp
              tendermint init
              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
 
              # extract pub key and node_id for nginx
-             tendermint show_node_id > /data/tendermint/export/node_id
              tendermint gen_validator > /data/tendermint/config/priv_validator_work.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".Key" > /data/tendermint/config/priv_validator_key.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
