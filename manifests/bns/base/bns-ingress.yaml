@@ -8,7 +8,7 @@ metadata:
       extractorfunc: client.ip
       rateset:
         bns.example.com:
-          period: 3s
+          period: 3s  
           average: 3
           burst: 6
   labels:
@@ -22,4 +22,4 @@ spec:
       paths:
       - backend:
           serviceName: bns
-          servicePort: 26657    
+          servicePort: 26657
