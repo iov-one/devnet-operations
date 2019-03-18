@@ -13,8 +13,6 @@ spec:
     name: p2p
   - port: 26657
     name: rpc
-  - port: 9080
-    name: pub-key
   selector:
     app: bns
     component: validator
@@ -59,6 +57,16 @@ spec:
         env:
         - name: TMHOME
           value: /data/tendermint
+        - name: VALIDATOR_POWER
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-init-config
+              key: validator.power
+        - name: VALIDATOR
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-init-config
+              key: validator              
         command:
           - bash
           - "-c"
@@ -68,6 +76,7 @@ spec:
             if [ ! -f /data/tendermint/export/pub_key.json ]; then
              mkdir -p /data/tendermint/export
              mkdir -p /data/bns
+             mkdir -p ${TMHOME}/tmp
              tendermint init
              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
 
@@ -76,7 +85,9 @@ spec:
              tendermint gen_validator > /data/tendermint/config/priv_validator_work.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".Key" > /data/tendermint/config/priv_validator_key.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
-             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" > /data/tendermint/export/pub_key.json
+             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"$VALIDATOR_POWER\", name: \"$VALIDATOR\"}" > ${TMHOME}/tmp/pub_validator.json
+             cat ${TMHOME}/config/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
+             rm -rf ${TMHOME}/tmp
             fi
         volumeMounts:
           - name: tmdir
@@ -120,21 +131,6 @@ spec:
         - containerPort: 26657
           name: rpc
         env:
-        - name: SEEDS
-          valueFrom:
-            configMapKeyRef:
-              name: tm-bns-init-config
-              key: seeds
-        - name: VALIDATOR_POWER
-          valueFrom:
-            configMapKeyRef:
-              name: tm-bns-init-config
-              key: validator.power
-        - name: VALIDATORS
-          valueFrom:
-            configMapKeyRef:
-              name: tm-bns-init-config
-              key: validators
         - name: TMHOME
           value: /data/tendermint
         command:
@@ -142,65 +138,8 @@ spec:
         - "-c"
         - |
           set -exo pipefail
-          fqdn_suffix=$(hostname -f | sed 's#[^.]*\.\(\)#\1#' | sed 's#[^.]*\.\(\)#\1#')
-          # create genesis
-          if [ ! -f ${TMHOME}/config/genesis_generated ]; then
-            rm -rf ${TMHOME}/tmp/
-            mkdir -p ${TMHOME}/tmp/
-            cp /etc/tendermint/genesis.json ${TMHOME}/tmp
-            # fill genesis file with validators
-            IFS=',' read -ra VALS_ARR <<< "$VALIDATORS"
-            for v in "${VALS_ARR[@]}"; do
-              # wait until validator generates priv/pub key pair
-              set +e
 
-              curl -s --fail "http://$v.$fqdn_suffix:9080/pub_key.json" > /dev/null
-              ERR=$?
-              while [ "$ERR" != 0 ]; do
-                sleep 5
-                curl -s --fail "http://$v.$fqdn_suffix:9080/pub_key.json" > /dev/null
-                ERR=$?
-              done
-              set -e
-
-              # add validator to genesis file along with its pub_key
-              curl -s "http://$v.$fqdn_suffix:9080/pub_key.json" | jq ". as \$k | {pub_key: \$k, power: \"$VALIDATOR_POWER\", name: \"$v\"}" > ${TMHOME}/tmp/pub_validator.json
-              cat ${TMHOME}/tmp/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/tmp/genesis_work && mv ${TMHOME}/tmp/genesis_work ${TMHOME}/tmp/genesis.json
-              rm ${TMHOME}/tmp/pub_validator.json
-            done
-            mv ${TMHOME}/tmp/genesis.json ${TMHOME}/config
-            touch ${TMHOME}/config/genesis_generated
-          fi
-
-          cp /etc/tendermint/config.toml ${TMHOME}/config
-
-          if [ -f /data/tendermint/config/addrbook.json ]; then
-            # Quick hack: deleting address book to fix stale IP addresses
-            rm -f ${TMHOME}/config/addrbook.json
-          fi
-
-          # construct seeds
-          IFS=',' read -ra SEEDS_ARR <<< "$SEEDS"
-          seeds=()
-          for s in "${SEEDS_ARR[@]}"; do
-            # wait until seed validators expose their node_id
-            set +e
-            curl -s --fail "http://$s.$fqdn_suffix:9080/node_id" > /dev/null
-            ERR=$?
-            while [ "$ERR" != 0 ]; do
-              sleep 2
-              curl -s --fail "http://$s.$fqdn_suffix:9080/node_id" > /dev/null
-              ERR=$?
-            done
-            set -e
-            # now get the data
-            node_id=`curl -s "http://$s.$fqdn_suffix:9080/node_id"`
-            seeds+=("tcp://$node_id@$s.$fqdn_suffix:26656")
-          done
-          seeds=$(IFS=','; echo "${seeds[*]}")
-
-          chmod -fR g-rwx /data/tendermint/data/
-          # wait for bov app started
+          # wait for bns to get started
           while [ ! -S /socks/app.sock ]; do
             sleep 1
           done
@@ -276,28 +215,6 @@ spec:
           requests:
             cpu: 550m
             memory: 512Mi
-      - name: pub-key
-        imagePullPolicy: IfNotPresent
-        image: nginx:1.15-alpine
-        ports:
-        - containerPort: 9080
-          name: pub-key
-        volumeMounts:
-        - name: tmdir
-          mountPath: /usr/share/nginx/
-          subPath: tendermint/export
-        - mountPath: /etc/nginx/nginx.conf
-          name: tm-initialization
-          subPath: pub_key_nginx.conf
-        - mountPath: /rw-volume
-          name: nginx-rw-volume
-        resources:
-          limits:
-            cpu: 15m
-            memory: 5Mi
-          requests:
-            cpu: 5m
-            memory: 3Mi
       volumes:
       - name: tm-initialization
         configMap:

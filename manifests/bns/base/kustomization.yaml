@@ -8,8 +8,6 @@ configMapGenerator:
 - name: tm-bns-init-config
   files: 
   - genesis.json
-  - pub_key_nginx.conf
   literals:
-  - validators=bns
+  - validator=bns
   - validator.power=10
-  - seeds=

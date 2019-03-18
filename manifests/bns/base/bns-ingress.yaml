@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: tendermint-bns
   annotations:
-    prometheus.io/probe: "true"
     kubernetes.io/ingress.class: "traefik"
     traefik.ingress.kubernetes.io/rate-limit: |-
       extractorfunc: client.ip
