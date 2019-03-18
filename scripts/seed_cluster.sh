@@ -1,6 +1,5 @@
 #!/usr/bin/env bash -eox pipefail
 manifestsPath=$(pwd)/manifests
-networkName=$@
 . "$(pwd)/scripts/seed_variables.sh"
 
 lego \

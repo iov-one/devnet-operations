@@ -10,6 +10,9 @@ variables:
 setup_cluster: 
 	@cd gcloud && ./project_setup.sh
 
+seed_cluster: 
+	@./scripts/seed_cluster.sh
+
 deps: 
 	# this only gets kustomize and lego as other dependencies
 	# are better installed in a platform-specific way
