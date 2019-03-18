@@ -1,171 +1,103 @@
 {
- "genesis_time": "2016-02-05T23:17:31.164Z",
- "chain_id": "bns-devnet",
- "validators": [],
- "consensus_params": {
-   "block_size_params": {
-     "max_bytes": "22020096",
-     "max_gas": "-1"
-   },
-   "evidence_params": {
-     "max_age": "100000"
-   }
- },
- "app_hash": "",
-  "app_state": {
-   "wallets": [
-     {
-       "address": "f6cade229408c93a2a8d181d62efce46ff60d210",
-       "name": "alice",
-       "coins": [
-         {
-           "whole": 123456789,
-           "ticker": "IOV"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "CASH"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "ALX"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "PAJA"
-         }
-       ]
-     },
-     {
-       "address": "e28ae9a6eb94fc88b73eb7cbd6b87bf93eb9bef0",
-       "name": "bert",
-       "coins": [
-         {
-           "whole": 123456789,
-           "ticker": "IOV"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "CASH"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "ALX"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "PAJA"
-         }
-       ]
-     },
-     {
-       "address": "b6d5110ff5502d28198797e7c5c81607ee7a4b20",
-       "name": "charlie",
-       "coins": [
-         {
-           "whole": 123456789,
-           "ticker": "IOV"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "CASH"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "ALX"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "PAJA"
-         }
-       ]
-     },
-     {
-       "address": "162b1809bda319cc6067b2290f4056bdcec24fab",
-       "name": "dora",
-       "coins": [
-         {
-           "whole": 123456789,
-           "ticker": "IOV"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "CASH"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "ALX"
-         },
-         {
-           "whole": 123456789,
-           "ticker": "PAJA"
-         }
-       ]
-     },
-     {
-       "address": "B1DE2F431945B8D7CE20DDD5F43FDA9609E9D7B8",
-       "name": "loadtester",
-       "coins": [
-         {
-           "whole": 999999999,
-           "ticker": "IOV"
-         }
-       ]
-     },
-     {
-       "address": "d9af55739e935c928f6cf0d00bcb4f5f08294823",
-       "name": "faucet",
-       "coins": [
-         {
-           "whole": 999999999,
-           "ticker": "IOV"
-         }
-       ]
-     },
-     {
-       "address": "b1ca7e78f74423ae01da3b51e676934d9105f282",
-       "name": "isabella",
-       "coins": [
-         {
-           "whole": 100,
-           "ticker": "IOV"
-         },
-         {
-           "whole": 100,
-           "ticker": "CASH"
-         },
-         {
-           "whole": 100,
-           "ticker": "ALX"
-         },
-         {
-           "whole": 100,
-           "ticker": "PAJA"
-         }
-       ]
-     }
+"genesis_time": "2016-02-05T23:17:31.164Z",
+"chain_id": "bns-devnet",
+"validators": [],
+"consensus_params": {
+  "block_size": {
+    "max_bytes": "22020096",
+    "max_gas": "-1"
+  },
+  "evidence": {
+    "max_age": "100000"
+  },
+  "validator": {
+    "pub_key_types": [
+      "ed25519"
+  ]}
+},
+"app_hash": "",
+ "app_state": {
+  "cash": [
+    {
+      "address": "46f52bfbdcc34ef53bc6cdab13d01cca534a28ba",
+      "name": "alice",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "f36e6d21a0df8ca91c4a85350256775ca9b2ac7a",
+      "name": "bert",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "0e95c039ef14ee329d0e09d84f909cf9eb5ef472",
+      "name": "faucet",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "b1de2f431945b8d7ce20ddd5f43fda9609e9d7b8",
+      "name": "loadtester",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
+      "name": "scenarios",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "b1ca7e78f74423ae01da3b51e676934d9105f282",
+      "name": "isabella",
+      "coins": [
+        {
+          "whole": 100,
+          "ticker": "IOV"
+        }
+      ]
+    }
+  ],
+  "currencies": [
+    {
+      "ticker": "IOV",
+      "name": "Main token of this chain",
+      "sig_figs": 6
+    }
+  ],
+  "update_validators": {
+    "addresses": ["5AE2C58796B0AD48FFE7602EAC3353488C859A2B"]
+  },
+  "multisig": [
+    {
+    "sigs": ["E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"],
+    "activation_threshold": 1,
+    "admin_threshold": 1
+    }
    ],
-   "tokens": [
-     {
-       "ticker": "IOV",
-       "name": "Main token of this chain",
-       "sig_figs": 6
-     },
-     {
-       "ticker": "CASH",
-       "name": "Second token of this chain",
-       "sig_figs": 6
-     },
-     {
-       "ticker": "ALX",
-       "name": "Third token of this chain",
-       "sig_figs": 6
-     },
-     {
-       "ticker": "PAJA",
-       "name": "Mightiest token of this chain",
-       "sig_figs": 9
-     }
-   ]
- }
-}
+  "gconf": {
+    "cash:minimal_fee": {},
+    "cash:collector_address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"
+  }
+}}
