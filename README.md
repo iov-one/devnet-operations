@@ -28,8 +28,3 @@ Valid Go installation, tested with v1.11.1
 ## (K)ustomizing things
 * A good starting point is to go through examples (here)[https://github.com/kubernetes-sigs/kustomize/tree/master/examples]
 * There are comments in `manifests/bns` base and zebranet kuztomization.yaml
-
-
-
-## TODO: Acessing traefik console
-* Instead of complicating the setup with another ingress we'll just use port-forwarding for that. Shouldn't actually be used that often anyway

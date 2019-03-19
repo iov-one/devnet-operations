@@ -2,9 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik-public
-  labels:
-    app: traefik-public
-    component: controller
 spec:
   selector:
     app: traefik-public

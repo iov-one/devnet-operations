@@ -9,10 +9,16 @@ lego \
 --dns="cloudflare" \
 run
 
-kubectl create secret generic traefik-public-certs --from-file="$certPath/certificates/_.$baseDomain.crt" \
---from-file="$certPath/certificates/_.$baseDomain.key"
+cp "$certPath/certificates/_.$baseDomain.crt" /tmp/cert.crt
+cp "$certPath/certificates/_.$baseDomain.key" /tmp/cert.key
 
-kubectl build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
+kubectl create secret generic traefik-public-certs --from-file="/tmp/cert.crt" \
+--from-file="/tmp/cert.key"
+
+rm -rf /tmp/cert.crt
+rm -rf /tmp/cert.key
+
+kustomize build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
 
 kustomize build ${manifestsPath}/bns/${networkName} | kubectl apply -f -
 

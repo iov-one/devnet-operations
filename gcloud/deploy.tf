@@ -113,7 +113,7 @@ resource "google_container_cluster" "primary" {
     initial_node_count = 2 # in each zone
 
     autoscaling {
-      max_node_count = 10 # in each zone
+      max_node_count = 2 # in each zone
       min_node_count = 1 # in each zone
     }
     node_config {
@@ -136,5 +136,5 @@ resource "google_container_cluster" "primary" {
     daily_maintenance_window {
       start_time = "04:00" # GMT
     }
-  }  
+  }
 }

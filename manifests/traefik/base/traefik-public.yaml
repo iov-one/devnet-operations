@@ -4,7 +4,6 @@ metadata:
   name: traefik-public
   labels:
     app: traefik-public
-    component: controller
 spec:
   replicas: 1
   selector:
@@ -17,18 +16,10 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        prometheus.io/port: "8080"
-        prometheus.io/scrape: "true"
       labels:
         app: traefik-public
-        component: controller
-    spec:
+    spec: 
       serviceAccountName: traefik-ingress
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        fsGroup: 2000
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       containers:
@@ -60,32 +51,11 @@ spec:
               cpu: 100m
               memory: 128Mi
           args:
-            - --api
-            - --ping
-            - --metrics.prometheus
             - --kubernetes
             - --logLevel=INFO
             - --kubernetes.namespaces=default
             - --kubernetes.labelselector=traffic-type=public
             - --configfile=/config/traefik.toml
-          readinessProbe:
-            tcpSocket:
-              port: internal
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            failureThreshold: 1
-            successThreshold: 1
-            timeoutSeconds: 2
-          livenessProbe:
-            tcpSocket:
-              port: internal
-            failureThreshold: 3
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 2
-          securityContext:
-            readOnlyRootFilesystem: true
       volumes:
       - name: certs
         secret:
@@ -100,9 +70,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik-public-console
-  labels:
-    app: traefik-public
-    component: controller
 spec:
   selector:
     app: traefik-public

@@ -10,7 +10,7 @@ defaultEntryPoints = ["http","https"]
   address = ":9443"
   [entryPoints.https.tls]
   [[entryPoints.https.tls.certificates]]
-  certFile = "/etc/tls-certs/_.zebranet.iov.one.crt"
-  keyFile = "/etc/tls-certs/_.zebranet.iov.one.key"
+  certFile = "/etc/tls-certs/cert.crt"
+  keyFile = "/etc/tls-certs/cert.key"
 [kubernetes]
 
