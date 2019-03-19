@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tendermint-bns
+  labels:
+    traffic-type: public
+spec:
+  rules:
+  - host: bns.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: bns
+          servicePort: 26657

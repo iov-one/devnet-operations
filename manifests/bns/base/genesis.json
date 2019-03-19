@@ -1,0 +1,103 @@
+{
+"genesis_time": "2016-02-05T23:17:31.164Z",
+"chain_id": "bns-devnet",
+"validators": [],
+"consensus_params": {
+  "block_size": {
+    "max_bytes": "22020096",
+    "max_gas": "-1"
+  },
+  "evidence": {
+    "max_age": "100000"
+  },
+  "validator": {
+    "pub_key_types": [
+      "ed25519"
+  ]}
+},
+"app_hash": "",
+ "app_state": {
+  "cash": [
+    {
+      "address": "46f52bfbdcc34ef53bc6cdab13d01cca534a28ba",
+      "name": "alice",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "f36e6d21a0df8ca91c4a85350256775ca9b2ac7a",
+      "name": "bert",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "0e95c039ef14ee329d0e09d84f909cf9eb5ef472",
+      "name": "faucet",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "b1de2f431945b8d7ce20ddd5f43fda9609e9d7b8",
+      "name": "loadtester",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
+      "name": "scenarios",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "b1ca7e78f74423ae01da3b51e676934d9105f282",
+      "name": "isabella",
+      "coins": [
+        {
+          "whole": 100,
+          "ticker": "IOV"
+        }
+      ]
+    }
+  ],
+  "currencies": [
+    {
+      "ticker": "IOV",
+      "name": "Main token of this chain",
+      "sig_figs": 6
+    }
+  ],
+  "update_validators": {
+    "addresses": ["5AE2C58796B0AD48FFE7602EAC3353488C859A2B"]
+  },
+  "multisig": [
+    {
+    "sigs": ["E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"],
+    "activation_threshold": 1,
+    "admin_threshold": 1
+    }
+   ],
+  "gconf": {
+    "cash:minimal_fee": {},
+    "cash:collector_address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"
+  }
+}}
