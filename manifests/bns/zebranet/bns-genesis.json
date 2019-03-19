@@ -1,0 +1,168 @@
+{
+"genesis_time": "2019-03-19T15:32:11.118591Z",
+"chain_id": "bns-zebranet",
+"validators": [],
+"consensus_params": {
+  "block_size": {
+    "max_bytes": "22020096",
+    "max_gas": "-1"
+  },
+  "evidence": {
+    "max_age": "100000"
+  },
+  "validator": {
+    "pub_key_types": [
+      "ed25519"
+  ]}
+},
+"app_hash": "",
+ "app_state": {
+   "cash": [
+     {
+       "address": "C1721181E83376EF978AA4A9A38A5E27C08C7BB2",
+       "name": "alice",
+       "coins": [
+         {
+           "whole": 123456789,
+           "ticker": "IOV"
+         }
+       ]
+     },
+     {
+       "address": "80572F6DD19291590E4BE0221EA0A4729F7F2827",
+       "name": "bert",
+       "coins": [
+         {
+           "whole": 123456789,
+           "ticker": "IOV"
+         }
+       ]
+     },
+     {
+       "address": "0e95c039ef14ee329d0e09d84f909cf9eb5ef472",
+       "name": "faucet",
+       "coins": [
+         {
+           "whole": 999999999,
+           "ticker": "IOV"
+         }
+       ]
+     },
+     {
+       "address": "b1de2f431945b8d7ce20ddd5f43fda9609e9d7b8",
+       "name": "loadtester",
+       "coins": [
+         {
+           "whole": 999999999,
+           "ticker": "IOV"
+         }
+       ]
+     },
+     {
+       "address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
+       "name": "scenarios",
+       "coins": [
+         {
+           "whole": 999999999,
+           "ticker": "IOV"
+         }
+       ]
+     }
+   ],
+   "currencies": [
+     {
+       "ticker": "IOV",
+       "name": "Main token of this chain"
+     }
+   ],
+   "multisig": [
+     {
+       "activation_threshold": 1,
+       "admin_threshold": 1,
+       "sigs": [
+         "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"
+       ]
+     }
+   ],
+   "update_validators": {
+     "addresses": [
+       "cond:multisig/usage/0000000000000001"
+     ]
+   },
+   "distribution": [
+     {
+       "admin": "cond:multisig/usage/0000000000000001",
+       "recipients": [
+         {
+           "address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
+           "weight": 1
+         }
+       ]
+     }
+   ],
+   "escrow": [
+     {
+       "amount": [
+         {
+           "ticker": "IOV",
+           "whole": 1000000
+         }
+       ],
+       "arbiter": "multisig/usage/0000000000000001",
+       "recipient": "cond:distribution/revenue/0000000000000001",
+       "sender": "0000000000000000000000000000000000000000",
+       "timeout": 9223372036854775807
+     }
+   ],
+   "gconf": {
+     "cash:collector_address": "cond:distribution/revenue/0000000000000001",
+     "cash:minimal_fee": {
+       "fractional": 100000000,
+       "ticker": "IOV"
+     },
+     "msgfee": [
+       {
+         "fee": {
+           "whole": 2,
+           "ticker": "IOV"
+         },
+         "msg_path": "distribution/newrevenue"
+       },
+       {
+         "fee": {
+           "fractional": 200000000,
+           "ticker": "IOV"
+         },
+         "msg_path": "distribution/distribute"
+       },
+       {
+         "fee": {
+           "whole": 1,
+           "ticker": "IOV"
+         },
+         "msg_path": "distribution/resetRevenue"
+       },
+       {
+         "fee": {
+           "fractional": 100000000,
+           "ticker": "IOV"
+         },
+         "msg_path": "escrow/release"
+       },
+       {
+         "fee": {
+           "fractional": 100000000,
+           "ticker": "IOV"
+         },
+         "msg_path": "escrow/return"
+       },
+       {
+         "fee": {
+           "whole": 0,
+           "ticker": "IOV"
+         },
+         "msg_path": "validators/update"
+       }
+     ]
+   }
+ }}
