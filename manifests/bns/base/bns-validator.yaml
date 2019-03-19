@@ -164,10 +164,9 @@ spec:
           while [ ! -S /socks/app.sock ]; do
             sleep 1
           done
-
+          
           exec tendermint node \
             --moniker="`hostname`" \
-            --p2p.persistent_peers="" \
             --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
         volumeMounts:
