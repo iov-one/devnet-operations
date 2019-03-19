@@ -31,4 +31,4 @@ configMapGenerator:
 - name: tm-bns-init-config
   behavior: replace
   files:
-    - bns-genesis.json
+    - genesis.json
