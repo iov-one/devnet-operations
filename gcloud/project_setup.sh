@@ -49,5 +49,5 @@ gcloud container clusters get-credentials $GCLOUD_PLATFORM --zone europe-west1-b
 
 # # Set admin binding
 for n in ${ADMIN_EMAILS//,/}; do
-    kubectl create clusterrolebinding cluster-admin-binding_${n} --clusterrole=cluster-admin --user=${n}@iov.one
+    kubectl create clusterrolebinding cluster-admin-binding_${n} --clusterrole=cluster-admin --user=${n}
 done

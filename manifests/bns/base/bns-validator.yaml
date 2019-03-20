@@ -3,25 +3,18 @@ kind: Service
 # A service allows to expose the pods ports for Ingress/Egress
 metadata:
   name: bns
-  labels:
-    app: bns
-    component: validator
 spec:
   ports:
   - port: 26657
     name: rpc
   selector:
     app: bns
-    component: validator
 ---
 # A loadbalancer service allows to expose the pods ports to the outside world via an IP
 apiVersion: v1
 kind: Service
 metadata:
   name: bns-p2p
-  labels:
-    app: bns
-    component: validator
 spec:
   ports:
   - port: 26656
@@ -29,16 +22,12 @@ spec:
     targetPort: 26656
   selector:
     app: bns
-    component: validator
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: bns
-  labels:
-    app: bns
-    component: validator
 spec:
   serviceName: bns  
   replicas: 1
@@ -52,7 +41,6 @@ spec:
     metadata:
       labels:
         app: bns
-        component: validator
     spec:
       affinity:
         podAntiAffinity:
@@ -151,11 +139,6 @@ spec:
         - |
           set -exo pipefail
           
-          if [ -f /data/tendermint/config/addrbook.json ]; then
-            # Quick hack: deleting address book to fix stale IP addresses
-            rm -f ${TMHOME}/config/addrbook.json
-          fi
-
           # wait for bns to get started
           while [ ! -S /socks/app.sock ]; do
             sleep 1

@@ -2,8 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: bns-faucet
-  labels:
-    traffic-type: public
 spec:
   rules:
   - host: bns-faucet.example.com
