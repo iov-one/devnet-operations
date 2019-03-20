@@ -70,17 +70,7 @@ spec:
         image: iov1/tendermint:0.25.0
         env:
         - name: TMHOME
-          value: /data/tendermint
-        - name: VALIDATOR_POWER
-          valueFrom:
-            configMapKeyRef:
-              name: tm-bns-init-config
-              key: validator.power
-        - name: VALIDATOR
-          valueFrom:
-            configMapKeyRef:
-              name: tm-bns-init-config
-              key: validator              
+          value: /data/tendermint          
         command:
           - bash
           - "-c"
@@ -97,7 +87,7 @@ spec:
              tendermint gen_validator > /data/tendermint/config/priv_validator_work.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".Key" > /data/tendermint/config/priv_validator_key.json
              cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
-             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"$VALIDATOR_POWER\", name: \"$VALIDATOR\"}" > ${TMHOME}/tmp/pub_validator.json
+             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
              cat ${TMHOME}/config/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
              rm -rf ${TMHOME}/tmp
             fi
