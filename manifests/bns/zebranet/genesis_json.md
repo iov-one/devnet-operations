@@ -107,7 +107,7 @@ The role of the arbiter requires therefore a lot of trust which can be modeled w
       "arbiter": "multisig/usage/0000000000000001",
       "recipient": "cond:distribution/revenue/0000000000000001",
       "sender": "0000000000000000000000000000000000000000",
-      "timeout": 9223372036854775807
+      "timeout": "2999-12-31T00:00:00Z"
     }
   ],
 ```
