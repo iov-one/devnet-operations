@@ -142,7 +142,6 @@ a product fee to the operation.
 For Example 0.001 IOV for sending tokens; 10 IOV for a new escrow contract and 1 IOV for the update.
  
 ```json
-  "gconf": {
 	"msgfee": [
 		{
 			"msg_path": "cash/send",
@@ -157,6 +156,5 @@ For Example 0.001 IOV for sending tokens; 10 IOV for a new escrow contract and 1
 			"fee": {"whole": 1,  "ticker": "IOV"}
 		},
 	]
-  }
 ```
 *  `"fractional": 001000000` = 1/1000 of a whole
