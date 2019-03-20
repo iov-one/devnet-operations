@@ -16,6 +16,3 @@ configMapGenerator:
 - name: tm-bns-init-config
   files: 
   - genesis.json
-  literals:
-  - validator=bns
-  - validator.power=10
