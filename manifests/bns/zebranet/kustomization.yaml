@@ -25,7 +25,6 @@ patchesJson6902:
 images:
 - name: iov1/tendermint
   newTag: v0.29.1
-images:
 - name: iov1/bnsd
   newTag: v0.12.1  
 # Replace the genesis with our zebranet file
