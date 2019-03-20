@@ -2,8 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: traefik-public
-  labels:
-    app: traefik-public
 spec:
   replicas: 1
   selector:
@@ -54,7 +52,6 @@ spec:
             - --kubernetes
             - --logLevel=INFO
             - --kubernetes.namespaces=default
-            - --kubernetes.labelselector=traffic-type=public
             - --configfile=/config/traefik.toml
       volumes:
       - name: certs
