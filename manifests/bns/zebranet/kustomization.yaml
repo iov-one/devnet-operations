@@ -18,10 +18,19 @@ patchesJson6902:
     version: v1beta1
     kind: Ingress
     name: bns-faucet
-  path: bns-faucet-ingress-patch.yaml  
+  path: bns-faucet-ingress-patch.yaml
 # some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
 # images simply match every image in the manifest by name and then override
 # selected properties. you can also specify newName if you want to rename the image  
 images:
 - name: iov1/tendermint
   newTag: v0.29.1
+- name: iov1/bnsd
+  newTag: v0.12.1  
+# Replace the genesis with our zebranet file
+# see example: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/combineConfigs.md
+configMapGenerator:
+- name: tm-bns-init-config
+  behavior: replace
+  files:
+    - genesis.json
