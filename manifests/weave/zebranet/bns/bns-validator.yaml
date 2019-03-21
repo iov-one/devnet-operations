@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: base
+# this file can be used to add/replace parts of the base spec 
+# by simply introducing the same structure.
+# note: if you want to edit instead of replacing things
+# you are better off with json 6902 patches, similar to 
+# bns-ingress-patch.yaml
+# consult https://github.com/kubernetes-sigs/kustomize/tree/6f566d7a38cffcbb74a2ca2d762f8fbd65055d44/examples/ldap
+# for a good example

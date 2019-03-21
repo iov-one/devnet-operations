@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: tendermint-bns
+  name: tendermint-base
 spec:
   rules:
-  - host: bns.example.com
+  - host: base.example.com
     http:
       paths:
       - backend:
-          serviceName: bns
+          serviceName: base
           servicePort: 26657  

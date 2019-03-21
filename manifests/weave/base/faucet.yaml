@@ -1,19 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: bns-faucet
+  name: base-faucet
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bns-faucet
+      app: base-faucet
   template:
     metadata:
       labels:
-        app: bns-faucet
+        app: base-faucet
     spec:
       containers:
-      - name: bns-faucet
+      - name: base-faucet
         image: iov1/iov-faucet:v0.5.1
         imagePullPolicy: Always
         env:
@@ -22,7 +22,7 @@ spec:
         - name: FAUCET_MNEMONIC
           valueFrom:
             secretKeyRef:
-              name: bns-faucet-settings
+              name: base-faucet-settings
               key: FAUCET_MNEMONIC
         - name: FAUCET_CREDIT_AMOUNT_TKN
           value: '10'
@@ -32,8 +32,8 @@ spec:
           value: '20'
         args:
           - start
-          - bns
-          - ws://bns.default.svc.cluster.local:26657
+          - base
+          - ws://base.default.svc.cluster.local:26657
         ports:
         - name: http
           containerPort: 8080
@@ -61,10 +61,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: bns-faucet
+  name: base-faucet
 spec:
   selector:
-    app: bns-faucet
+    app: base-faucet
   ports:
   - name: http
     protocol: TCP

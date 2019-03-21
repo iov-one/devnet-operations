@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: bns-faucet
+  name: base-faucet
 spec:
   rules:
-  - host: bns-faucet.example.com
+  - host: base-faucet.example.com
     http:
       paths:
       - backend:
-          serviceName: bns-faucet
+          serviceName: base-faucet
           servicePort: http
