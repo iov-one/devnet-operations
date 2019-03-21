@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: base-faucet
+  name: weave_placeholder-faucet
 spec:
   rules:
-  - host: base-faucet.example.com
+  - host: weave_placeholder-faucet.example.com
     http:
       paths:
       - backend:
-          serviceName: base-faucet
+          serviceName: weave_placeholder-faucet
           servicePort: http

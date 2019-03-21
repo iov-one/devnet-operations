@@ -11,13 +11,13 @@ patchesJson6902:
     group: extensions
     version: v1beta1
     kind: Ingress
-    name: tendermint-base
+    name: tendermint-weave_placeholder
   path: bns-ingress-patch.yaml
 - target:
     group: extensions
     version: v1beta1
     kind: Ingress
-    name: base-faucet
+    name: weave_placeholder-faucet
   path: bns-faucet-ingress-patch.yaml
 # some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
 # images simply match every image in the manifest by name and then override
@@ -25,13 +25,13 @@ patchesJson6902:
 images:
 - name: iov1/tendermint
   newTag: v0.29.1
-- name: iov1/base
+- name: iov1/weave_placeholder
   newName: iov1/bnsd
   newTag: v0.12.1  
 # Replace the genesis with our zebranet file
 # see example: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/combineConfigs.md
 configMapGenerator:
-- name: tm-base-init-config
+- name: tm-weave_placeholder-init-config
   behavior: replace
   files:
     - genesis.json

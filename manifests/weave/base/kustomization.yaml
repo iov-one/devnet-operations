@@ -10,9 +10,9 @@ resources:
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
 configMapGenerator:
-- name: base-tendermint-config
+- name: weave_placeholder-tendermint-config
   files: 
   - config.toml
-- name: tm-base-init-config
+- name: tm-weave_placeholder-init-config
   files: 
   - genesis.json

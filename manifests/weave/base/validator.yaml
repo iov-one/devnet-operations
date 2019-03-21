@@ -2,45 +2,45 @@ apiVersion: v1
 kind: Service
 # A service allows to expose the pods ports for Ingress/Egress
 metadata:
-  name: base
+  name: weave_placeholder
 spec:
   ports:
   - port: 26657
     name: rpc
   selector:
-    app: base
+    app: weave_placeholder
 ---
 # A loadbalancer service allows to expose the pods ports to the outside world via an IP
 apiVersion: v1
 kind: Service
 metadata:
-  name: base-p2p
+  name: weave_placeholder-p2p
 spec:
   ports:
   - port: 26656
     name: p2p
     targetPort: 26656
   selector:
-    app: base
+    app: weave_placeholder
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: base
+  name: weave_placeholder
 spec:
-  serviceName: base  
+  serviceName: weave_placeholder  
   replicas: 1
   selector:
     matchLabels:
-      app: base
+      app: weave_placeholder
   updateStrategy:
     type: RollingUpdate
   podManagementPolicy: Parallel
   template:
     metadata:
       labels:
-        app: base
+        app: weave_placeholder
     spec:
       affinity:
         podAntiAffinity:
@@ -49,7 +49,7 @@ spec:
               matchExpressions:
               - key: app
                 operator: In
-                values: [base]
+                values: [weave_placeholder]
             topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       initContainers:
@@ -93,9 +93,9 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
-      - name: base-init
+      - name: weave_placeholder-init
         imagePullPolicy: IfNotPresent
-        image: iov1/base:v0.12.0
+        image: iov1/weave_placeholder:v0.12.0
         command:
         args:
           - '-home=/data/tendermint'
@@ -129,7 +129,7 @@ spec:
         - |
           set -exo pipefail
           
-          # wait for base to get started
+          # wait for weave_placeholder to get started
           while [ ! -S /socks/app.sock ]; do
             sleep 1
           done
@@ -185,19 +185,19 @@ spec:
           periodSeconds: 5
           successThreshold: 1
           timeoutSeconds: 2
-      - name: base
+      - name: weave_placeholder
         imagePullPolicy: IfNotPresent
-        image: iov1/base:v0.12.0
+        image: iov1/weave_placeholder:v0.12.0
         args:
-          - '-home=/data/base'
+          - '-home=/data/weave_placeholder'
           - start
           - '-bind=unix:///socks/app.sock'
         volumeMounts:
         - name: socksdir
           mountPath: /socks
         - name: tmdir
-          mountPath: /data/base
-          subPath: base
+          mountPath: /data/weave_placeholder
+          subPath: weave_placeholder
         resources:
           limits:
             cpu: 1100m
@@ -208,10 +208,10 @@ spec:
       volumes:
       - name: tm-initialization
         configMap:
-          name: tm-base-init-config
+          name: tm-weave_placeholder-init-config
       - name: tm-configuration
         configMap:
-          name: base-tendermint-config
+          name: weave_placeholder-tendermint-config
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume
