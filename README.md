@@ -27,4 +27,4 @@ Valid Go installation, tested with v1.11.1
 
 ## (K)ustomizing things
 * A good starting point is to go through examples (here)[https://github.com/kubernetes-sigs/kustomize/tree/master/examples]
-* There are comments in `manifests/bns` base and zebranet kuztomization.yaml
+* There are comments in `manifests/weave/` base and zebranet kuztomization.yaml

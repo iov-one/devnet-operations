@@ -1,8 +1,8 @@
 # some info on bases and strategicMerge https://github.com/kubernetes-sigs/kustomize/blob/master/examples/helloWorld/README.md
 bases:
-  - ../base
+  - ../../base
 patchesStrategicMerge:
-  - bns-validator.yaml
+  - bcp-validator.yaml
 # some info on patches https://github.com/kubernetes-sigs/kustomize/blob/master/examples/jsonpatch.md
 # the idea here is that we target a certain entity defined earlier, by group, version, kind and name
 # and then specify a patch 
@@ -11,26 +11,27 @@ patchesJson6902:
     group: extensions
     version: v1beta1
     kind: Ingress
-    name: tendermint-bns
-  path: bns-ingress-patch.yaml
+    name: tendermint-weave_placeholder
+  path: bcp-ingress-patch.yaml
 - target:
     group: extensions
     version: v1beta1
     kind: Ingress
-    name: bns-faucet
-  path: bns-faucet-ingress-patch.yaml
+    name: weave_placeholder-faucet
+  path: bcp-faucet-ingress-patch.yaml
 # some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
 # images simply match every image in the manifest by name and then override
 # selected properties. you can also specify newName if you want to rename the image  
 images:
 - name: iov1/tendermint
   newTag: v0.29.1
-- name: iov1/bnsd
+- name: iov1/weave_placeholder
+  newName: iov1/bcpd
   newTag: v0.12.1  
 # Replace the genesis with our zebranet file
 # see example: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/combineConfigs.md
 configMapGenerator:
-- name: tm-bns-init-config
+- name: tm-weave_placeholder-init-config
   behavior: replace
   files:
     - genesis.json

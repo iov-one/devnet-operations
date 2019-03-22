@@ -1,0 +1,73 @@
+{
+"genesis_time": "2016-02-05T23:17:31.164Z",
+"chain_id": "bcp-devnet",
+"validators": [],
+"consensus_params": {
+  "block_size": {
+    "max_bytes": "22020096",
+    "max_gas": "-1"
+  },
+  "evidence": {
+    "max_age": "100000"
+  },
+  "validator": {
+    "pub_key_types": [
+      "ed25519"
+  ]}
+},
+"app_hash": "",
+ "app_state": {
+  "cash": [
+    {
+      "address": "BE9AE920601A6051322040C3EF3D40ADB8C9303F",
+      "name": "charlie",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "F0E792FCF670AE31A7B4BAF466D59A661513BCD4",
+      "name": "dora",
+      "coins": [
+        {
+          "whole": 123456789,
+          "ticker": "IOV"
+        }
+      ]
+    },
+    {
+      "address": "0e95c039ef14ee329d0e09d84f909cf9eb5ef472",
+      "name": "faucet",
+      "coins": [
+        {
+          "whole": 999999999,
+          "ticker": "IOV"
+        }
+      ]
+    }
+  ],
+  "currencies": [
+    {
+      "ticker": "IOV",
+      "name": "Main token of this chain",
+      "sig_figs": 6
+    }
+  ],
+  "update_validators": {
+    "addresses": ["5AE2C58796B0AD48FFE7602EAC3353488C859A2B"]
+  },
+  "multisig": [
+    {
+    "sigs": ["E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"],
+    "activation_threshold": 1,
+    "admin_threshold": 1
+    }
+   ],
+  "gconf": {
+    "cash:minimal_fee": {},
+    "cash:collector_address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0"
+  }
+}}

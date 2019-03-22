@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: bns
+  name: weave_placeholder
 # this file can be used to add/replace parts of the base spec 
 # by simply introducing the same structure.
 # note: if you want to edit instead of replacing things
