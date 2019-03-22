@@ -1,4 +1,4 @@
-VARIABLES := gcloud/variables.tf gcloud/export_variables.sh
+VARIABLES := gcloud/variables.tf gcloud/export_variables.sh scripts/seed_variables.sh
 
 variables:
 	@for file in $(VARIABLES); do \
