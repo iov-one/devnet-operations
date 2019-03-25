@@ -10,7 +10,7 @@ Google cloud billing account
 Valid Go installation, tested with v1.11.1  
 
 ### Setup
-* Run `make variables` to set you up with sample `gcloud/export_variables.sh` and `gcloud/variables.tf`  
+* Run `make variables` to set you up with sample `gcloud/export_variables.sh`, `gcloud/variables.tf` and `scripts/seed_variables.sh`
 * Modify these files as suggested in comments to each variable  
 * Make sure all the generated paths like terraform plans/state and account are pointing to a secure place and not `/tmp`  
 * Run `make setup_cluster`
