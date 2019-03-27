@@ -77,7 +77,6 @@ spec:
              cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
              cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
              cat ${TMHOME}/config/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
-             rm -rf ${TMHOME}/tmp
             fi
         volumeMounts:
           - name: tmdir
