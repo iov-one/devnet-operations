@@ -33,6 +33,6 @@ Valid Go installation, tested with v1.11.1
 ## Optional: deploying kubebot to a cluster
 * Make sure you create kubebot-env.txt in manifests/kubebot/${networkName} out of kubebot-env.txt_example
 * Edit your token secret according to README here: https://github.com/iov-one/kubebot#setup
-* Edit your channel secret to represent channels you want your bot to watch on, it could be one channel or a list of channels separated by space, e.g. `#frontend $backend`
+* Edit your channel secret to represent channels you want your bot to watch on, it could be one channel or a list of channels separated by space, e.g. `#frontend #backend`
 * Make sure you invite the bot to these channels for it to work
 * Run `make seed_bot` to deploy the bot
