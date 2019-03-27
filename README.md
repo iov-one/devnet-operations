@@ -10,7 +10,8 @@ Google cloud billing account
 Valid Go installation, tested with v1.11.1  
 
 ### Setup
-* Run `make variables` to set you up with sample `gcloud/export_variables.sh`, `gcloud/variables.tf` and `scripts/seed_variables.sh`
+* Run `make variables` to set you up with sample `gcloud/export_variables.sh`, `gcloud/variables.tf` and `scripts/seed_variables.shkubebot.go
+`
 * Modify these files as suggested in comments to each variable  
 * Make sure all the generated paths like terraform plans/state and account are pointing to a secure place and not `/tmp`  
 * Run `make setup_cluster`
@@ -28,3 +29,10 @@ Valid Go installation, tested with v1.11.1
 ## (K)ustomizing things
 * A good starting point is to go through examples (here)[https://github.com/kubernetes-sigs/kustomize/tree/master/examples]
 * There are comments in `manifests/weave/` base and zebranet kuztomization.yaml
+
+## Optional: deploying kubebot to a cluster
+* Make sure you create kubebot-env.txt in manifests/kubebot/${networkName} out of kubebot-env.txt_example
+* Edit your token secret according to README here: https://github.com/iov-one/kubebot#setup
+* Edit your channel secret to represent channels you want your bot to watch on, it could be one channel or a list of channels separated by space, e.g. `#frontend $backend`
+* Make sure you invite the bot to these channels for it to work
+* Run `make seed_bot` to deploy the bot

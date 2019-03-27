@@ -13,6 +13,9 @@ setup_cluster:
 seed_cluster: 
 	@./scripts/seed_cluster.sh
 
+seed_bot:
+	@./scripts/seed_bot.sh
+
 deps: 
 	# this only gets kustomize and lego as other dependencies
 	# are better installed in a platform-specific way

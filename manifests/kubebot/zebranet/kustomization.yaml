@@ -1,0 +1,7 @@
+bases:
+- ../base
+
+secretGenerator:
+- name: kubebot-secrets
+  env: kubebot-env.txt
+  type: Opaque

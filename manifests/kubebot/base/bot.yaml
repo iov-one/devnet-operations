@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubebot
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kubebot-rbac
+subjects:
+  - kind: ServiceAccount
+    name: kubebot
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io       
+---  
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kubebot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubebot
+  template:
+    metadata:
+      labels:
+        app: kubebot
+    spec:
+      serviceAccountName: kubebot
+      containers:
+      - name: kubebot
+        image: iov1/kubebot:0.0.1
+        imagePullPolicy: Always
+        env:
+        - name: KUBEBOT_SLACK_TOKEN
+          valueFrom:
+            secretKeyRef: 
+              name: kubebot-secrets
+              key: token 
+        - name: KUBEBOT_SLACK_CHANNELS_IDS
+          valueFrom:
+            secretKeyRef: 
+              name: kubebot-secrets 
+              key: channel
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi      
