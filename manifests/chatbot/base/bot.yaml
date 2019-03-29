@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubebot
+  name: chatbot
   namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: kubebot-rbac
+  name: chatbot-rbac
 subjects:
   - kind: ServiceAccount
-    name: kubebot
+    name: chatbot
     namespace: default
 roleRef:
   kind: ClusterRole
@@ -20,37 +20,32 @@ roleRef:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kubebot
+  name: chatbot
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kubebot
+      app: chatbot
   template:
     metadata:
       labels:
-        app: kubebot
+        app: chatbot
     spec:
-      serviceAccountName: kubebot
+      serviceAccountName: chatbot
       containers:
-      - name: kubebot
-        image: iov1/kubebot:0.0.1
+      - name: chatbot
+        image: iov1/chatbot:0.0.1
         imagePullPolicy: Always
         env:
-        - name: KUBEBOT_SLACK_TOKEN
+        - name: CHATBOT_SLACK_TOKEN
           valueFrom:
             secretKeyRef: 
-              name: kubebot-secrets
+              name: chatbot-secrets
               key: token 
-        - name: KUBEBOT_SLACK_CHANNELS_IDS
-          valueFrom:
-            secretKeyRef: 
-              name: kubebot-secrets 
-              key: channel
         resources:
           requests:
             cpu: 50m
             memory: 64Mi
           limits:
             cpu: 100m
-            memory: 128Mi      
+            memory: 128Mi       

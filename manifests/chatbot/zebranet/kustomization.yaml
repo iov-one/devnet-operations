@@ -2,6 +2,6 @@ bases:
 - ../base
 
 secretGenerator:
-- name: kubebot-secrets
-  env: kubebot-env.txt
+- name: chatbot-secrets
+  env: chatbot-env.txt
   type: Opaque
