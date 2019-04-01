@@ -37,6 +37,6 @@ Valid Go installation, tested with v1.11.1
 * Run `make seed_bot` to deploy the bot
 
 ## Deploying current artifacts with chatbot
-* Bns bnsd: `!deploy bns bns iov1/bnsd:v0.13.0` tendermint: `!deploy bns tendermint iov1/tendermint:0.29.1`
-* Bcp bcpd: `!deploy bcp bcp iov1/bcpd:v0.13.0` tendermint: `!deploy bcp tendermint iov1/tendermint:0.29.1`
+* Bns bnsd: `!deploy bns bns iov1/bnsd:v0.13.0` tendermint: `!deploy bns tendermint iov1/tendermint:v0.29.1`
+* Bcp bcpd: `!deploy bcp bcp iov1/bcpd:v0.13.0` tendermint: `!deploy bcp tendermint iov1/tendermint:v0.29.1`
 * Faucet Bns: `!deploy bns-faucet bns-faucet iov1/iov-faucet:v0.5.1` Bcp: `!deploy bcp-faucet bcp-faucet iov1/iov-faucet:v0.5.1`
