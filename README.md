@@ -11,6 +11,7 @@ Valid Go installation, tested with v1.11.1
 
 ### Setup
 * Run `make variables` to set you up with sample `gcloud/export_variables.sh`, `gcloud/variables.tf` and `scripts/seed_variables.sh`
+`
 * Modify these files as suggested in comments to each variable  
 * Make sure all the generated paths like terraform plans/state and account are pointing to a secure place and not `/tmp`  
 * Run `make setup_cluster`
@@ -28,3 +29,14 @@ Valid Go installation, tested with v1.11.1
 ## (K)ustomizing things
 * A good starting point is to go through examples (here)[https://github.com/kubernetes-sigs/kustomize/tree/master/examples]
 * There are comments in `manifests/weave/` base and zebranet kuztomization.yaml
+
+## Optional: deploying chatbot to a cluster
+* Make sure you create chatbot-env.txt in manifests/chatbot/${networkName} out of chatbot-env.txt_example
+* Edit your token secret according to README here: https://github.com/iov-one/chatbot#setup
+* Make sure you invite the bot to channels for it to work
+* Run `make seed_bot` to deploy the bot
+
+## Deploying current artifacts with chatbot
+* Bns bnsd: `!deploy bns bns iov1/bnsd:v0.13.0` tendermint: `!deploy bns tendermint iov1/tendermint:v0.29.1`
+* Bcp bcpd: `!deploy bcp bcp iov1/bcpd:v0.13.0` tendermint: `!deploy bcp tendermint iov1/tendermint:v0.29.1`
+* Faucet Bns: `!deploy bns-faucet bns-faucet iov1/iov-faucet:v0.5.1` Bcp: `!deploy bcp-faucet bcp-faucet iov1/iov-faucet:v0.5.1`

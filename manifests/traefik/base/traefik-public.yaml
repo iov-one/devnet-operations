@@ -23,7 +23,7 @@ spec:
       containers:
         - image: traefik:v1.7.4-alpine
           name: traefik-public
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 9080
               name: http

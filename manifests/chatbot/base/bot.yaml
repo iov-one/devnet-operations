@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chatbot
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: chatbot-rbac
+subjects:
+  - kind: ServiceAccount
+    name: chatbot
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io       
+---  
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chatbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      labels:
+        app: chatbot
+    spec:
+      serviceAccountName: chatbot
+      containers:
+      - name: chatbot
+        image: iov1/chatbot:v0.0.1
+        imagePullPolicy: Always
+        env:
+        - name: CHATBOT_SLACK_TOKEN
+          valueFrom:
+            secretKeyRef: 
+              name: chatbot-secrets
+              key: token 
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi       

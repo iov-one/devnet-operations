@@ -54,7 +54,7 @@ spec:
       terminationGracePeriodSeconds: 10
       initContainers:
       - name: tm-gen-validator
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         image: iov1/tendermint:0.25.0
         env:
         - name: TMHOME
@@ -95,7 +95,7 @@ spec:
             cpu: 100m
             memory: 100Mi
       - name: weave_placeholder-init
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         image: iov1/weave_placeholder:v0.12.0
         command:
         args:
@@ -114,7 +114,7 @@ spec:
             memory: 100Mi
       containers:
       - name: tendermint
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         image: iov1/tendermint:0.25.0
         ports:
         - containerPort: 26656
@@ -187,7 +187,7 @@ spec:
           successThreshold: 1
           timeoutSeconds: 2
       - name: weave_placeholder
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         image: iov1/weave_placeholder:v0.12.0
         args:
           - '-home=/data/weave_placeholder'
