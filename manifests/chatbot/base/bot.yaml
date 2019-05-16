@@ -34,7 +34,7 @@ spec:
       serviceAccountName: chatbot
       containers:
       - name: chatbot
-        image: iov1ops/chatbot:v0.0.2
+        image: iov1ops/chatbot:v0.0.3
         imagePullPolicy: Always
         env:
         - name: CHATBOT_SLACK_TOKEN
