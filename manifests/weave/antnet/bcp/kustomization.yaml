@@ -1,0 +1,29 @@
+# some info on bases and strategicMerge https://github.com/kubernetes-sigs/kustomize/blob/master/examples/helloWorld/README.md
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - bcp-validator.yaml
+patchesJson6902:
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: tendermint-weave_placeholder
+  path: bcp-ingress-patch.yaml
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: weave_placeholder-faucet
+  path: bcp-faucet-ingress-patch.yaml
+images:
+- name: iov1/tendermint
+  newTag: v0.31.5
+- name: iov1/weave_placeholder
+  newName: iov1/bcpd
+  newTag: v0.15.0
+configMapGenerator:
+- name: tm-weave_placeholder-init-config
+  behavior: replace
+  files:
+    - genesis.json
