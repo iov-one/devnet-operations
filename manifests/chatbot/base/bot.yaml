@@ -34,7 +34,7 @@ spec:
       serviceAccountName: chatbot
       containers:
       - name: chatbot
-        image: iov1ops/chatbot:v0.0.3
+        image: iov1ops/chatbot:v0.0.4
         imagePullPolicy: Always
         env:
         - name: CHATBOT_SLACK_TOKEN
@@ -42,6 +42,11 @@ spec:
             secretKeyRef: 
               name: chatbot-secrets
               key: token 
+        - name: CHATBOT_CLUSTER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: chatbot-secrets
+              key: net
         resources:
           requests:
             cpu: 50m
