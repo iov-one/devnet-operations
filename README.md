@@ -37,11 +37,11 @@ Valid Go installation, tested with v1.11.1
 * Run `make seed_bot` to deploy the bot
 
 ## Deploying current artifacts with chatbot
-* Bns bnsd: `!deploy bns bns iov1/bnsd:v0.13.0` tendermint: `!deploy bns tendermint iov1/tendermint:v0.29.1`
-* Bcp bcpd: `!deploy bcp bcp iov1/bcpd:v0.13.0` tendermint: `!deploy bcp tendermint iov1/tendermint:v0.29.1`
-* Faucet Bns: `!deploy bns-faucet bns-faucet iov1/iov-faucet:v0.5.1` Bcp: `!deploy bcp-faucet bcp-faucet iov1/iov-faucet:v0.5.1`
+* Bns bnsd: `!deploy your_devnet bns bns iov1/bnsd:v0.13.0` tendermint: `!deploy your_devnet bns tendermint iov1/tendermint:v0.29.1`
+* Bcp bcpd: `!deploy your_devnet bcp bcp iov1/bcpd:v0.13.0` tendermint: `!deploy your_devnet bcp tendermint iov1/tendermint:v0.29.1`
+* Faucet Bns: `!deploy your_devnet bns-faucet bns-faucet iov1/iov-faucet:v0.5.1` Bcp: `!deploy your_devnet bcp-faucet bcp-faucet iov1/iov-faucet:v0.5.1`
 
 ## Resetting current artifacts with chatbot
 * You will ever need that if you deploy breaking changes that require persistent storage reset
-* Bns: `!reset bns`
-* Bcp: `!reset bcp`
+* Bns: `!reset your_devnet bns`
+* Bcp: `!reset your_devnet bcp`
