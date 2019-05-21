@@ -114,12 +114,13 @@
        "timeout": "2999-12-31T00:00:00Z"
      }
    ],
-   "gconf": {
-     "cash:collector_address": "cond:dist/revenue/0000000000000001",
-     "cash:minimal_fee": {
-       "fractional": 100000000,
-       "ticker": "IOV",
-       "//amount": "0.1IOV"
+   "conf": {
+     "cash": {
+       "collector_address": "cond:dist/revenue/0000000000000001",
+       "minimal_fee": {
+         "fractional": 50000000,
+         "ticker": "IOV"
+       }
      }
    },
    "msgfee": [
