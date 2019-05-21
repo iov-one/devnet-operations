@@ -125,13 +125,15 @@ defined by the `cash:collector_address`and `cash:minimal_fee` keys. Like any wea
 can also point to a contract to distribute the amount within a group.
  
 ```json
-  "gconf": {
-    "cash:collector_address": "cond:distribution/revenue/0000000000000001",
-     "cash:minimal_fee": {
-          "fractional": 100000000,
-          "ticker": "IOV"
-        }
-  },
+   "conf": {
+     "cash": {
+       "collector_address": "cond:dist/revenue/0000000000000001",
+       "minimal_fee": {
+         "fractional": 50000000,
+         "ticker": "IOV"
+       }
+     }
+   }
 ```
 * `"cash:collector_address": "cond:distribution/revenue/0000000000000001"`= distribution contract with ID=1
 * `"fractional": 100000000`= 1/10 of a whole
