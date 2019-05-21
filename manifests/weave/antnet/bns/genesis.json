@@ -121,6 +121,9 @@
          "fractional": 50000000,
          "ticker": "IOV"
        }
+     },
+     "migration": {
+       "admin": "cond:multisig/usage/0000000000000001"
      }
    },
    "msgfee": [
@@ -154,5 +157,67 @@
        "msg_path": "nft/username/issue"
      }
    ]
-   }
- }
+   },
+  "initialize_schema": [
+    {
+      "pkg": "batch",
+      "ver": 1
+    },
+    {
+      "pkg": "cash",
+      "ver": 1
+    },
+    {
+      "pkg": "currency",
+      "ver": 1
+    },
+    {
+      "pkg": "distribution",
+      "ver": 1
+    },
+    {
+      "pkg": "escrow",
+      "ver": 1
+    },
+    {
+      "pkg": "gov",
+      "ver": 1
+    },
+    {
+      "pkg": "hashlock",
+      "ver": 1
+    },
+    {
+      "pkg": "msgfee",
+      "ver": 1
+    },
+    {
+      "pkg": "multisig",
+      "ver": 1
+    },
+    {
+      "pkg": "namecoin",
+      "ver": 1
+    },
+    {
+      "pkg": "nft",
+      "ver": 1
+    },
+    {
+      "pkg": "paychan",
+      "ver": 1
+    },
+    {
+      "pkg": "sigs",
+      "ver": 1
+    },
+    {
+      "pkg": "utils",
+      "ver": 1
+    },
+    {
+      "pkg": "validators",
+      "ver": 1
+    }
+  ]
+}

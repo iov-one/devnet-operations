@@ -160,3 +160,24 @@ For Example 0.001 IOV for sending tokens; 10 IOV for a new escrow contract and 1
 	]
 ```
 *  `"fractional": 001000000` = 1/1000 of a whole
+
+### Document schema
+Protobuf IO messages as well as the persistence model is versioned so that we can upgrade them on demand.
+The versions are manged on a module/ package level:
+```
+   "conf": {
+     "migration": {
+       "admin": "cond:multisig/usage/0000000000000001"
+     }
+   },
+  "initialize_schema": [
+    {
+      "pkg": "batch",
+      "ver": 1
+    },
+    {
+      "pkg": "cash",
+      "ver": 1
+    }
+  ]
+```
