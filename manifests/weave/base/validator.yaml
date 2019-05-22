@@ -147,7 +147,7 @@ spec:
           name: tm-initialization
           subPath: genesis.json
           readOnly: true
-        - mountPath: /etc/tendermint/config.toml
+        - mountPath: /data/tendermint/config/config.toml
           name: tm-configuration
           subPath: config.toml
           readOnly: true
