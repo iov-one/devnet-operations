@@ -103,7 +103,7 @@ resource "google_container_cluster" "primary" {
   }
 
   # find master versions: gcloud container get-server-config
-  min_master_version = "1.12.5-gke.10"
+  min_master_version = "1.12.7-gke.10"
 
   lifecycle {
     ignore_changes = ["node_pool"]
