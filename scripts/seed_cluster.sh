@@ -21,7 +21,6 @@ rm -rf /tmp/cert.key
 kustomize build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
 
 kustomize build manifests/weave/${networkName}/bns | sed 's/weave_placeholder/bns/' | kubectl apply -f -
-#kustomize build manifests/weave/${networkName} /bcp | sed 's/weave_placeholder/bcp/' | kubectl apply -f -
 
 # experimental: set DNS records
 # public traefik
