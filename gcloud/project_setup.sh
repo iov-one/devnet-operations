@@ -24,7 +24,7 @@ gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
 for n in ${EMAILS//,/ }; do
 gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
   --member user:${n} \
-  --role roles/container.developer
+  --role roles/owner
 done
 
 # # Enable APIs for terraform
