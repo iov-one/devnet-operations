@@ -1,4 +1,0 @@
-# patch examples here: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/jsonpatch.md
-- op: replace
-  path: /spec/rules/0/host
-  value: bcp.antnet.iov.one
