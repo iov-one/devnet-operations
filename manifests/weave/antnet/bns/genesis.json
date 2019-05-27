@@ -132,10 +132,11 @@
       }
     },
     "msgfee": [
-      {"fee": "2 IOV",   "msg_path": "distribution/newrevenue"},
-      {"fee": "0.2 IOV", "msg_path": "distribution/distribute"},
-      {"fee": "1 IOV",   "msg_path": "distribution/resetRevenue"},
-      {"fee": "5 IOV",   "msg_path": "nft/username/issue"}
+      {"fee": "100 IOV", "msg_path": "distribution/newrevenue"},
+      {"fee": "100 IOV", "msg_path": "distribution/distribute"},
+      {"fee": "100 IOV", "msg_path": "distribution/resetRevenue"},
+      {"fee": "150 IOV", "msg_path": "nft/username/issue"},
+      {"fee": "10 IOV",  "msg_path": "validators/update"}
     ],
     "update_validators": {
       "addresses": [
