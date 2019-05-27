@@ -132,35 +132,10 @@
       }
     },
     "msgfee": [
-      {
-        "fee": {
-          "whole": 2,
-          "ticker": "IOV"
-        },
-        "msg_path": "distribution/newrevenue"
-      },
-      {
-        "fee": {
-          "fractional": 200000000,
-          "ticker": "IOV",
-          "//amount": "0.2IOV"
-        },
-        "msg_path": "distribution/distribute"
-      },
-      {
-        "fee": {
-          "whole": 1,
-          "ticker": "IOV"
-        },
-        "msg_path": "distribution/resetRevenue"
-      },
-      {
-        "fee": {
-          "whole": 5,
-          "ticker": "IOV"
-        },
-        "msg_path": "nft/username/issue"
-      }
+      {"fee": "2 IOV",   "msg_path": "distribution/newrevenue"},
+      {"fee": "0.2 IOV", "msg_path": "distribution/distribute"},
+      {"fee": "1 IOV",   "msg_path": "distribution/resetRevenue"},
+      {"fee": "5 IOV",   "msg_path": "nft/username/issue"}
     ],
     "update_validators": {
       "addresses": [
