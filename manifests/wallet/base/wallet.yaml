@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wallet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallet
+  template:
+    metadata:
+      labels:
+        app: wallet
+    spec:
+      containers:
+      - name: wallet
+        image: iov1/wallet-demo:v0.13.0
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /assets/assets/config.json
+          name: wallet-conf-volume
+          subPath: config.json
+          readOnly: true
+        - mountPath: /rw-volume
+          name: rw-volume
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: X-Custom-Header
+              value: heathcheck
+          initialDelaySeconds: 1
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: X-Custom-Header
+              value: heathcheck
+          initialDelaySeconds: 2
+          periodSeconds: 3
+      volumes:
+      - name: wallet-conf-volume
+        configMap:
+          name: wallet-conf    
+      - name: rw-volume
+        emptyDir: {}
+                
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallet
+spec:
+  selector:
+    app: wallet
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 3000

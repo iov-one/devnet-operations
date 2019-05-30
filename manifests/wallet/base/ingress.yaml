@@ -1,0 +1,12 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: wallet
+spec:
+  rules:
+  - host: wallet.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: wallet
+          servicePort: http
