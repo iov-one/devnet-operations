@@ -27,7 +27,7 @@ images:
   newTag: v0.31.5
 - name: iov1/weave_placeholder
   newName: iov1/bnsd
-  newTag: v0.16.0
+  newTag: v0.17.0
 configMapGenerator:
 - name: tm-weave_placeholder-init-config
   behavior: replace
