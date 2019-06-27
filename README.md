@@ -47,5 +47,5 @@ Valid Go installation, tested with v1.11.1
 * Bns: `!reset your_devnet bns`
 * Bcp: `!reset your_devnet bcp`
 
-## Access a p2p node external ip address
+## Access the p2p node external ip address
 * `!p2p your_devnet bns`
