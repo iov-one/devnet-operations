@@ -46,3 +46,6 @@ Valid Go installation, tested with v1.11.1
 * You will ever need that if you deploy breaking changes that require persistent storage reset
 * Bns: `!reset your_devnet bns`
 * Bcp: `!reset your_devnet bcp`
+
+## Access a p2p node external ip address
+* `!p2p your_devnet bns`
