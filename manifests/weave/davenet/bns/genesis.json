@@ -121,11 +121,7 @@
     ],
     "conf": {
       "cash": {
-        "collector_address": "cond:dist/revenue/0000000000000001",
-        "minimal_fee": {
-          "fractional": 50000000,
-          "ticker": "IOV"
-        }
+        "collector_address": "cond:dist/revenue/0000000000000001"
       },
       "migration": {
         "admin": "cond:multisig/usage/0000000000000001"
