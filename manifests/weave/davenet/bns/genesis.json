@@ -24,100 +24,70 @@
         "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91",
         "//name": "Anton",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81",
         "//name": "Betty",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA",
         "//name": "Dilip",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "DCE021F4ABECB14611255B520C97B3025A07E140",
         "//name": "Emily",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D",
         "//name": "Faisal",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE",
         "//name": "Giesela",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "28691FFE125E01B306614121EAC07FEA14917781",
         "//name": "Harry",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "AD102CF85A366D726BBBCA54DBD3818B6278A66A",
         "//name": "Ingrid",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "0EDAA1225975A3A64BC7216F9429A3EA34A757D9",
         "//name": "Jonny",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
         "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
         "//name": "Cloe",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
@@ -169,7 +139,7 @@
     "distribution": [
       {
         "admin": "cond:multisig/usage/0000000000000001",
-        "recipients": [
+        "destinations": [
           {
             "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
             "weight": 1
@@ -186,8 +156,8 @@
           }
         ],
         "arbiter": "0000000000000000000000000000000000000001",
-        "recipient": "cond:dist/revenue/0000000000000001",
-        "sender": "0000000000000000000000000000000000000000",
+        "destination": "cond:dist/revenue/0000000000000001",
+        "source": "0000000000000000000000000000000000000000",
         "timeout": "2999-12-31T00:00:00Z"
       }
     ],
@@ -220,12 +190,12 @@
           "admin": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
           "electors": [
             {
-              "_name": "Anton",
+              "//name": "Anton",
               "weight": 10,
               "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
             },
             {
-              "_name": "Betty",
+              "//name": "Betty",
               "weight": 11,
               "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
             }
@@ -236,22 +206,22 @@
           "admin": "cond:gov/rule/0000000000000002",
           "electors": [
             {
-              "_name": "Anton",
+              "//name": "Anton",
               "weight": 15,
               "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
             },
             {
-              "_name": "Betty",
+              "//name": "Betty",
               "weight": 15,
               "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
             },
             {
-              "_name": "Cloe",
+              "//name": "Cloe",
               "weight": 10,
               "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
             },
             {
-              "_name": "Emily",
+              "//name": "Emily",
               "weight": 10,
               "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
             }
@@ -262,17 +232,17 @@
           "admin": "cond:gov/rule/0000000000000003",
           "electors": [
             {
-              "_name": "Anton",
+              "//name": "Anton",
               "weight": 15,
               "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
             },
             {
-              "_name": "Dilip",
+              "//name": "Dilip",
               "weight": 20,
               "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
             },
             {
-              "_name": "Gisela",
+              "//name": "Gisela",
               "weight": 5,
               "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
             }
@@ -283,22 +253,22 @@
           "admin": "cond:gov/rule/0000000000000004",
           "electors": [
             {
-              "_name": "Betty",
+              "//name": "Betty",
               "weight": 15,
               "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
             },
             {
-              "_name": "Dilip",
+              "//name": "Dilip",
               "weight": 15,
               "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
             },
             {
-              "_name": "Emily",
+              "//name": "Emily",
               "weight": 10,
               "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
             },
             {
-              "_name": "Faisal",
+              "//name": "Faisal",
               "weight": 10,
               "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
             }
@@ -309,17 +279,17 @@
           "admin": "cond:gov/rule/0000000000000005",
           "electors": [
             {
-              "_name": "Cloe",
+              "//name": "Cloe",
               "weight": 15,
               "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
             },
             {
-              "_name": "Faisal",
+              "//name": "Faisal",
               "weight": 10,
               "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
             },
             {
-              "_name": "Giesela",
+              "//name": "Giesela",
               "weight": 15,
               "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
             }
