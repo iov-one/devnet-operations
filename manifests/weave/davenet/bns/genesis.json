@@ -133,7 +133,7 @@
     "update_validators": {
       "addresses": [
         "cond:multisig/usage/0000000000000001",
-        "cond:gov/rule/0000000000000002"
+        "cond:gov/rule/0000000000000005"
       ]
     },
     "distribution": [
@@ -425,6 +425,32 @@
       {
         "pkg": "validators",
         "ver": 1
+      }
+    ],
+    "username": [
+      {
+        "username": "cnn.com*iov",
+        "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+        "//name": "Cloe",
+        "targets": [
+          {
+            "blockchain_id": "bns-davenet",
+            "address": "uh27p8SgTzmpj6W026i8aYHX1A4=",
+            "//address": "echo \"BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E\" | xxd -r -p | base64"
+          }
+        ]
+      },
+      {
+        "username": "dave@iov.one*iov",
+        "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+        "//name": "Cloe",
+        "targets": [
+          {
+            "blockchain_id": "bns-davenet",
+            "address": "uh27p8SgTzmpj6W026i8aYHX1A4=",
+            "//address": "echo \"BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E\" | xxd -r -p | base64"
+          }
+        ]
       }
     ]
   }
