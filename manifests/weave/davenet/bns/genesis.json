@@ -21,23 +21,73 @@
   "app_state": {
     "cash": [
       {
-        "address": "C1721181E83376EF978AA4A9A38A5E27C08C7BB2",
-        "//name": "alice",
+        "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91",
+        "//name": "Anton",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
         ]
       },
       {
-        "address": "80572F6DD19291590E4BE0221EA0A4729F7F2827",
-        "//name": "bert",
+        "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81",
+        "//name": "Betty",
         "coins": [
-          {
-            "whole": 123456789,
-            "ticker": "IOV"
-          }
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA",
+        "//name": "Dilip",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "DCE021F4ABECB14611255B520C97B3025A07E140",
+        "//name": "Emily",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D",
+        "//name": "Faisal",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE",
+        "//name": "Giesela",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "28691FFE125E01B306614121EAC07FEA14917781",
+        "//name": "Harry",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "AD102CF85A366D726BBBCA54DBD3818B6278A66A",
+        "//name": "Ingrid",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "0EDAA1225975A3A64BC7216F9429A3EA34A757D9",
+        "//name": "Jonny",
+        "coins": [
+          "123456789 IOV"
+        ]
+      },
+      {
+        "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+        "//name": "Cloe",
+        "coins": [
+          "123456789 IOV"
         ]
       },
       {
@@ -59,16 +109,6 @@
             "ticker": "IOV"
           }
         ]
-      },
-      {
-        "address": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
-        "//name": "scenarios",
-        "coins": [
-          {
-            "whole": 999999999,
-            "ticker": "IOV"
-          }
-        ]
       }
     ],
     "currencies": [
@@ -83,7 +123,8 @@
         "admin_threshold": 1,
         "participants": [
           {
-            "signature": "E28AE9A6EB94FC88B73EB7CBD6B87BF93EB9BEF0",
+            "signature": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+            "//name": "Cloe",
             "weight": 1
           }
         ]
@@ -91,13 +132,14 @@
     ],
     "update_validators": {
       "addresses": [
-        "cond:multisig/usage/0000000000000001"
+        "cond:multisig/usage/0000000000000001",
+        "cond:gov/rule/0000000000000005"
       ]
     },
     "distribution": [
       {
         "admin": "cond:multisig/usage/0000000000000001",
-        "recipients": [
+        "destinations": [
           {
             "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
             "weight": 1
@@ -114,8 +156,8 @@
           }
         ],
         "arbiter": "0000000000000000000000000000000000000001",
-        "recipient": "cond:dist/revenue/0000000000000001",
-        "sender": "0000000000000000000000000000000000000000",
+        "destination": "cond:dist/revenue/0000000000000001",
+        "source": "0000000000000000000000000000000000000000",
         "timeout": "2999-12-31T00:00:00Z"
       }
     ],
@@ -128,13 +170,195 @@
       }
     },
     "msgfee": [
-      {"fee": "100 IOV", "msg_path": "username/register_token"},
-      {"fee": "10 IOV", "msg_path": "username/change_token_targets"},
-      {"fee": "50 IOV", "msg_path": "username/transfer_token"}
+      {
+        "fee": "100 IOV",
+        "msg_path": "username/register_token"
+      },
+      {
+        "fee": "10 IOV",
+        "msg_path": "username/change_token_targets"
+      },
+      {
+        "fee": "50 IOV",
+        "msg_path": "username/transfer_token"
+      }
     ],
-    "update_validators": {
-      "addresses": [
-        "cond:multisig/usage/0000000000000001"
+    "governance": {
+      "electorate": [
+        {
+          "title": "Test manually managed by Cloe",
+          "admin": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+          "electors": [
+            {
+              "//name": "Anton",
+              "weight": 10,
+              "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+            },
+            {
+              "//name": "Betty",
+              "weight": 11,
+              "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+            }
+          ]
+        },
+        {
+          "title": "Governing Board",
+          "admin": "cond:gov/rule/0000000000000002",
+          "electors": [
+            {
+              "//name": "Anton",
+              "weight": 15,
+              "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+            },
+            {
+              "//name": "Betty",
+              "weight": 15,
+              "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+            },
+            {
+              "//name": "Cloe",
+              "weight": 10,
+              "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+            },
+            {
+              "//name": "Emily",
+              "weight": 10,
+              "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+            }
+          ]
+        },
+        {
+          "title": "Economic Committee",
+          "admin": "cond:gov/rule/0000000000000003",
+          "electors": [
+            {
+              "//name": "Anton",
+              "weight": 15,
+              "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+            },
+            {
+              "//name": "Dilip",
+              "weight": 20,
+              "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+            },
+            {
+              "//name": "Gisela",
+              "weight": 5,
+              "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+            }
+          ]
+        },
+        {
+          "title": "Tech Committee",
+          "admin": "cond:gov/rule/0000000000000004",
+          "electors": [
+            {
+              "//name": "Betty",
+              "weight": 15,
+              "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+            },
+            {
+              "//name": "Dilip",
+              "weight": 15,
+              "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+            },
+            {
+              "//name": "Emily",
+              "weight": 10,
+              "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+            },
+            {
+              "//name": "Faisal",
+              "weight": 10,
+              "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+            }
+          ]
+        },
+        {
+          "title": "Validator Committee",
+          "admin": "cond:gov/rule/0000000000000005",
+          "electors": [
+            {
+              "//name": "Cloe",
+              "weight": 15,
+              "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+            },
+            {
+              "//name": "Faisal",
+              "weight": 10,
+              "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+            },
+            {
+              "//name": "Giesela",
+              "weight": 15,
+              "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "admin": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+          "title": "Test manually managed by Cloe",
+          "voting_period": "5m",
+          "threshold": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "quorum": {
+            "numerator": 2,
+            "denominator": 3
+          },
+          "electorate_id": 1
+        },
+        {
+          "admin": "cond:gov/rule/0000000000000002",
+          "title": "Governing Board",
+          "voting_period": "5m",
+          "threshold": {
+            "numerator": 2,
+            "denominator": 3
+          },
+          "electorate_id": 2
+        },
+        {
+          "admin": "cond:gov/rule/0000000000000003",
+          "title": "Economic Committee",
+          "voting_period": "5m",
+          "threshold": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "quorum": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "electorate_id": 3
+        },
+        {
+          "admin": "cond:gov/rule/0000000000000004",
+          "title": "Tech Committee",
+          "voting_period": "5m",
+          "threshold": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "electorate_id": 4
+        },
+        {
+          "admin": "cond:gov/rule/0000000000000005",
+          "title": "Validator Committee",
+          "voting_period": "5m",
+          "threshold": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "quorum": {
+            "numerator": 1,
+            "denominator": 2
+          },
+          "electorate_id": 5
+        }
       ]
     },
     "initialize_schema": [
@@ -201,6 +425,32 @@
       {
         "pkg": "validators",
         "ver": 1
+      }
+    ],
+    "username": [
+      {
+        "username": "cnn.com*iov",
+        "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+        "//name": "Cloe",
+        "targets": [
+          {
+            "blockchain_id": "bns-davenet",
+            "address": "uh27p8SgTzmpj6W026i8aYHX1A4=",
+            "//address": "echo \"BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E\" | xxd -r -p | base64"
+          }
+        ]
+      },
+      {
+        "username": "dave@iov.one*iov",
+        "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+        "//name": "Cloe",
+        "targets": [
+          {
+            "blockchain_id": "bns-davenet",
+            "address": "uh27p8SgTzmpj6W026i8aYHX1A4=",
+            "//address": "echo \"BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E\" | xxd -r -p | base64"
+          }
+        ]
       }
     ]
   }
