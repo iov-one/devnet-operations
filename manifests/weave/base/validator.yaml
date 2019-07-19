@@ -143,10 +143,6 @@ spec:
         - name: tmdir
           mountPath: /data/tendermint
           subPath: tendermint
-        - mountPath: /etc/tendermint/genesis.json
-          name: tm-initialization
-          subPath: genesis.json
-          readOnly: true
         - mountPath: /data/tendermint/config/config.toml
           name: tm-configuration
           subPath: config.toml
@@ -216,8 +212,6 @@ spec:
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume
-        emptyDir: {}
-      - name: nginx-rw-volume
         emptyDir: {}
   volumeClaimTemplates:
   - metadata:
