@@ -1,0 +1,35 @@
+# some info on bases and strategicMerge https://github.com/kubernetes-sigs/kustomize/blob/master/examples/helloWorld/README.md
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - bns-validator.yaml
+# some info on patches https://github.com/kubernetes-sigs/kustomize/blob/master/examples/jsonpatch.md
+# the idea here is that we target a certain entity defined earlier, by group, version, kind and name
+# and then specify a patch 
+patchesJson6902:
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: tendermint-weave_placeholder
+  path: bns-ingress-patch.yaml
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: weave_placeholder-faucet
+  path: bns-faucet-ingress-patch.yaml
+# some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
+# images simply match every image in the manifest by name and then override
+# selected properties. you can also specify newName if you want to rename the image  
+images:
+- name: iov1/tendermint
+  newTag: v0.31.5
+- name: iov1/weave_placeholder
+  newName: iov1/bnsd
+  newTag: v0.19.0
+configMapGenerator:
+- name: tm-weave_placeholder-init-config
+  behavior: replace
+  files:
+    - genesis.json
