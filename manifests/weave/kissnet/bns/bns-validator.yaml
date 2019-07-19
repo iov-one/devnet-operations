@@ -9,3 +9,69 @@ metadata:
 # bns-ingress-patch.yaml
 # consult https://github.com/kubernetes-sigs/kustomize/tree/6f566d7a38cffcbb74a2ca2d762f8fbd65055d44/examples/ldap
 # for a good example
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: tm-gen-validator
+        imagePullPolicy: Always
+        image: iov1/tendermint:0.25.0
+        env:
+          - name: TMHOME
+            value: /data/tendermint
+          - name: GENESIS_URL
+            value: https://raw.githubusercontent.com/iov-one/devnet-operations/kissnet/manifests/weave/kissnet/bns/genesis.json
+        command:
+          - bash
+          - "-c"
+        args:
+          - |
+            set -exo pipefail
+            if [ ! -f ${TMHOME}/.INITIALISED ]; then
+             mkdir -p /data/bns
+             mkdir -p ${TMHOME}/tmp
+             tendermint init
+
+             # get our big genesis.json
+             rm -f ${TMHOME}/config/genesis.json
+             curl -s --fail ${GENESIS_URL} > ${TMHOME}/config/genesis.json_work
+
+             # generate new key and add to genesis and local prival signer
+             tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
+             cat ${TMHOME}/config/priv_validator_work.json | jq ".Key" > ${TMHOME}/config/priv_validator_key.json
+             cat ${TMHOME}/config/priv_validator_work.json | jq ".LastSignState" > ${TMHOME}/data/priv_validator_state.json
+             cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
+             cat ${TMHOME}/config/genesis.json_work | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
+
+             rm -rf ${TMHOME}/tmp
+             rm -f  ${TMHOME}/config/genesis.json_work
+             chmod 444 ${TMHOME}/config/genesis.json
+
+             touch ${TMHOME}/.INITIALISED
+            fi
+        volumeMounts:
+          - name: tmdir
+            mountPath: "/data"
+          - $patch: delete
+            mountPath: /etc/tendermint/genesis.json
+            name: tm-initialization
+      volumes:
+        - $patch: delete
+          name: tm-initialization
+      containers:
+      - name: tendermint
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 4Gi
+          requests:
+            cpu: 750m
+            memory: 2Gi
+      - name: weave_placeholder
+        resources:
+          limits:
+            cpu: 1500m
+            memory: 12Gi
+          requests:
+            cpu: 750m
+            memory: 8Gi

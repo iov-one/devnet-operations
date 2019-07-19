@@ -31,5 +31,3 @@ images:
 configMapGenerator:
 - name: tm-weave_placeholder-init-config
   behavior: replace
-  files:
-    - genesis.json
