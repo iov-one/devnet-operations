@@ -1,4 +1,4 @@
 # patch examples here: https://github.com/kubernetes-sigs/kustomize/blob/master/examples/jsonpatch.md
 - op: replace
-  path: /spec/template/spec/containers/0/env/3/value
+  path: /spec/template/spec/containers/0/env/2/value
   value: "500"
