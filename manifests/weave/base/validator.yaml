@@ -80,6 +80,7 @@ spec:
              rm -rf ${TMHOME}/tmp
              touch ${TMHOME}/.INITIALISED
             fi
+            rm -f /socks/app.sock
         volumeMounts:
           - name: tmdir
             mountPath: "/data"
@@ -87,6 +88,8 @@ spec:
             name: tm-initialization
             subPath: genesis.json
             readOnly: true
+          - mountPath: /socks
+            name: socksdir
         resources:
           limits:
             cpu: 150m
