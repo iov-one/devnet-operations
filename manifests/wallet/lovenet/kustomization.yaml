@@ -17,3 +17,7 @@ configMapGenerator:
 - name: wallet-conf
   files:
     - config.json
+images:
+- name: iov1/wallet-demo
+  newName: iov1/bierzo-wallet
+  newTag: v0.2.0
