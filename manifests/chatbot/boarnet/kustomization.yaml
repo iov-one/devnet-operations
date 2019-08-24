@@ -1,0 +1,7 @@
+bases:
+- ../base
+
+secretGenerator:
+- name: chatbot-secrets
+  env: chatbot-env.txt
+  type: Opaque
