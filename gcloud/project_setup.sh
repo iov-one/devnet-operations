@@ -34,7 +34,7 @@ gcloud services enable \
   cloudbilling.googleapis.com \
   iam.googleapis.com \
   compute.googleapis.com \
-  container.googleapis.com 
+  container.googleapis.com
 
 terraform init
 

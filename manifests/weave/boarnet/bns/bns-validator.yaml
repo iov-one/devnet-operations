@@ -20,7 +20,7 @@ spec:
           - name: TMHOME
             value: /data/tendermint
           - name: GENESIS_URL
-            value: https://raw.githubusercontent.com/iov-one/devnet-operations/feature/boarnet/manifests/weave/boarnet/bns/genesis.json
+            value:  https://raw.githubusercontent.com/iov-one/devnet-operations/feature/boarnet/manifests/weave/boarnet/bns/genesis.json
         command:
           - bash
           - "-c"
