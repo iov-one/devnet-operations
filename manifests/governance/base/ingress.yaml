@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: faucet
+  name: governance
 spec:
   rules:
-  - host: faucet.example.com
+  - host: governance.example.com
     http:
       paths:
       - backend:
-          serviceName: faucet
+          serviceName: governance
           servicePort: http

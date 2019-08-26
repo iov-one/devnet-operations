@@ -17,13 +17,13 @@ patchesJson6902:
     group: extensions
     version: v1beta1
     kind: Ingress
-    name: weave_placeholder-faucet
+    name: faucet
   path: bns-faucet-ingress-patch.yaml
 - target:
     group: extensions
     version: v1beta1
     kind: Deployment
-    name: weave_placeholder-faucet
+    name: faucet
   path: bns-faucet-patch.yaml
 # some info in images https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md
 # images simply match every image in the manifest by name and then override
@@ -33,9 +33,9 @@ images:
   newTag: v0.31.5
 - name: iov1/weave_placeholder
   newName: iov1/bnsd
-  newTag: v0.22.0
+  newTag: v0.21.0
 - name: iov1/iov-faucet
-  newTag: v0.8.1
+  newTag: v0.9.0
 configMapGenerator:
 - name: tm-weave_placeholder-init-config
   behavior: replace

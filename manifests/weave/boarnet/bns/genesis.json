@@ -167,9 +167,10 @@
         ]
       }
     ],
+
     "escrow": [
       {
-        "//name": "guarantee fond",
+        "//name": "guarantee fund",
         "amount": [
           {
             "ticker": "IOV",
@@ -178,12 +179,30 @@
         ],
         "arbiter": "cond:gov/rule/0000000000000002",
         "destination": "cond:gov/rule/0000000000000002",
-        "//destination": "reward fond - cash account",
+        "//destination": "reward fund - cash account",
         "source": "0000000000000000000000000000000000000000",
         "timeout": "2999-12-31T00:00:00Z"
+      },
+      {
+        "//name": "vesting first tranche",
+        "amount": [
+          {
+            "ticker": "IOV",
+            "whole": 1234567
+          }
+        ],
+        "arbiter": "0000000000000000000000000000000000000000",
+        "destination": "04C3DB7CCCACF58EEFCC296FF7AD0F6DB7C2FA17",
+        "source": "04C3DB7CCCACF58EEFCC296FF7AD0F6DB7C2FA17",
+        "timeout": "2019-08-28T00:00:00Z"
       }
     ],
     "conf": {
+      "username": {
+        "owner": "cond:gov/rule/0000000000000001",
+        "valid_username_name": "^[a-z0-9\\-_.]{3,64}$",
+        "valid_username_label": "^iov$"
+      },
       "cash": {
         "collector_address": "cond:gov/rule/0000000000000002",
         "//collector_address": "reward fond - cash account",
