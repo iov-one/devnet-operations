@@ -1,7 +1,17 @@
 {
   "genesis_time": "2019-03-19T15:32:11.118591Z",
   "chain_id": "iov-boarnet",
-  "validators": [],
+  "validators": [
+    {
+      "address": "F0172DBD75D6B3A178AD127EE9B9EFB68E2177AD",
+      "pub_key": {
+        "type": "tendermint/PubKeyEd25519",
+        "value": "nhNVhFJVjZUNfvpLRydH+UF/wHKXFrx2rVPYc8gSKY0="
+      },
+      "power": "1",
+      "name": "workhorse"
+    }
+  ],
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",
