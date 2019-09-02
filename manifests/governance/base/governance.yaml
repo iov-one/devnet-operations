@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: governance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: governance
+  template:
+    metadata:
+      labels:
+        app: governance
+    spec:
+      containers:
+      - name: governance
+        image: iov1/sil-governance:v0.3.2
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /assets/static/config/conf.json
+          name: governance-conf-volume
+          subPath: config.json
+          readOnly: true
+        - mountPath: /rw-volume
+          name: rw-volume
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: X-Custom-Header
+              value: heathcheck
+          initialDelaySeconds: 1
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            httpHeaders:
+            - name: X-Custom-Header
+              value: heathcheck
+          initialDelaySeconds: 2
+          periodSeconds: 3
+      volumes:
+      - name: governance-conf-volume
+        configMap:
+          name: governance-conf
+      - name: rw-volume
+        emptyDir: {}
+                
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: governance
+spec:
+  selector:
+    app: governance
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 3000

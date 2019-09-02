@@ -1,0 +1,5 @@
+# a list of all the manifests required, make sure to add a file here if you add it to
+# this folder
+resources:
+- ingress.yaml
+- governance.yaml
