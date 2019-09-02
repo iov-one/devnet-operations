@@ -171,19 +171,6 @@
         "//destination": "reward fund - cash account",
         "source": "0000000000000000000000000000000000000000",
         "timeout": "2999-12-31T00:00:00Z"
-      },
-      {
-        "//name": "vesting first tranche",
-        "amount": [
-          {
-            "ticker": "IOV",
-            "whole": 1234567
-          }
-        ],
-        "arbiter": "0000000000000000000000000000000000000000",
-        "destination": "04C3DB7CCCACF58EEFCC296FF7AD0F6DB7C2FA17",
-        "source": "04C3DB7CCCACF58EEFCC296FF7AD0F6DB7C2FA17",
-        "timeout": "2019-08-28T00:00:00Z"
       }
     ],
     "conf": {
