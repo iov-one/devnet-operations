@@ -19,8 +19,6 @@ spec:
         env:
           - name: TMHOME
             value: /data/tendermint
-          - name: GENESIS_URL
-            value:  https://raw.githubusercontent.com/iov-one/devnet-operations/feature/boarnet/manifests/weave/boarnet/bns/genesis.json
         command:
           - bash
           - "-c"
@@ -32,9 +30,8 @@ spec:
              mkdir -p ${TMHOME}/tmp
              tendermint init
 
-             # get our big genesis.json
-             rm -f ${TMHOME}/config/genesis.json
-             curl -s --fail ${GENESIS_URL} > ${TMHOME}/config/genesis.json_work
+             cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+             cat ${TMHOME}/config/genesis.json > ${TMHOME}/config/genesis.json_work
 
              # generate new key and add to genesis and local prival signer
              tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
@@ -53,14 +50,12 @@ spec:
         volumeMounts:
           - name: tmdir
             mountPath: "/data"
-          - $patch: delete
-            mountPath: /etc/tendermint/genesis.json
+          - mountPath: /etc/tendermint/genesis.json
             name: tm-initialization
+            subPath: genesis.json
+            readOnly: true
           - mountPath: /socks
             name: socksdir
-      volumes:
-        - $patch: delete
-          name: tm-initialization
       containers:
       - name: tendermint
         resources:
@@ -70,6 +65,17 @@ spec:
           requests:
             cpu: 750m
             memory: 2Gi
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -o
+              - pipefail
+              - -ec
+              - 'curl -s --fail http://localhost:26657/abci_info | jq --exit-status ".result.response"'
+          failureThreshold: 999999
+          periodSeconds: 20
+          initialDelaySeconds: 40
       - name: weave_placeholder
         resources:
           limits:
