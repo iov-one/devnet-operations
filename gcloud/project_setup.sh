@@ -38,16 +38,16 @@ gcloud services enable \
 
 terraform init
 
-# Generate a plan and store it to a file
+ Generate a plan and store it to a file
 terraform plan -state="$TF_STATE" -out "$TF_PLAN"
 
-# Apply the plan
+ Apply the plan
 terraform apply -state-out="$TF_STATE" "$TF_PLAN"
 
-# # Import credentials
+ # Import credentials
 gcloud container clusters get-credentials $GCLOUD_PLATFORM --zone europe-west1-b --project ${TF_VAR_gcloud_project}
 
-# # Set admin binding
+# Set admin binding
 for n in ${ADMIN_EMAILS//,/}; do
     kubectl create clusterrolebinding cluster-admin-binding_${n} --clusterrole=cluster-admin --user=${n}
 done

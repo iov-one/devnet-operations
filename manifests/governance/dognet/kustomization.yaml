@@ -1,0 +1,13 @@
+bases:
+  - ../base
+patchesJson6902:
+- target:
+    group: extensions
+    version: v1beta1
+    kind: Ingress
+    name: governance
+  path: ingress-patch.yaml
+configMapGenerator:
+- name: governance-conf
+  files:
+    - config.json
