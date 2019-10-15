@@ -8,7 +8,7 @@ gcloud projects create ${TF_VAR_gcloud_project} \
 gcloud beta billing projects link ${TF_VAR_gcloud_project} \
   --billing-account ${TF_VAR_billing_account}
 
-# # Create a new service account for terraform
+# Create a new service account for terraform
 gcloud iam service-accounts create terraform \
   --project ${TF_VAR_gcloud_project} \
   --display-name "Terraform admin account"
@@ -20,14 +20,14 @@ gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
   --member serviceAccount:terraform@${TF_VAR_gcloud_project}.iam.gserviceaccount.com \
   --role roles/owner
 
-# # Add humans
+# Add humans
 for n in ${EMAILS//,/ }; do
 gcloud projects add-iam-policy-binding ${TF_VAR_gcloud_project} \
   --member user:${n} \
   --role roles/owner
 done
 
-# # Enable APIs for terraform
+# Enable APIs for terraform
 gcloud services enable \
   --project ${TF_VAR_gcloud_project} \
   cloudresourcemanager.googleapis.com \
@@ -38,13 +38,13 @@ gcloud services enable \
 
 terraform init
 
- Generate a plan and store it to a file
+# Generate a plan and store it to a file
 terraform plan -state="$TF_STATE" -out "$TF_PLAN"
 
- Apply the plan
+# Apply the plan
 terraform apply -state-out="$TF_STATE" "$TF_PLAN"
 
- # Import credentials
+# Import credentials
 gcloud container clusters get-credentials $GCLOUD_PLATFORM --zone europe-west1-b --project ${TF_VAR_gcloud_project}
 
 # Set admin binding
