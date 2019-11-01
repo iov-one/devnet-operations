@@ -2,6 +2,7 @@
 manifestsPath=$(pwd)/manifests
 . "$(pwd)/scripts/seed_variables.sh"
 
+# staging server: --server=https://acme-staging-v02.api.letsencrypt.org/directory \
 lego \
 --path=$certPath \
 --email="$certEmail" \

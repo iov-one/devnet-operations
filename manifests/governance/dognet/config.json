@@ -1,0 +1,16 @@
+{
+  "names": {
+    "iov-lovenet": "IOV dognet"
+  },
+  "extensionId": "hkmeinfklhongiffbgkfaandidpmklen",
+  "bnsChain": {
+    "chainSpec": {
+      "codecType": "bns",
+      "node": "wss://rpc-private-a-dognet.iov.one/"
+    },
+    "faucetSpec": {
+      "uri": "https://faucet.dognet.iov.one",
+      "tokens": ["IOV"]
+    }
+  }
+}
