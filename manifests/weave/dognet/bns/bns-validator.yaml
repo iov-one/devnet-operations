@@ -26,25 +26,25 @@ spec:
           - |
             set -exo pipefail
             if [ ! -f ${TMHOME}/.INITIALISED ]; then
-             mkdir -p /data/bns
-             mkdir -p ${TMHOME}/tmp
-             tendermint init
+              mkdir -p /data/bns
+              mkdir -p ${TMHOME}/tmp
+              tendermint init
 
-             cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
-             cat ${TMHOME}/config/genesis.json > ${TMHOME}/config/genesis.json_work
+              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+              cat ${TMHOME}/config/genesis.json > ${TMHOME}/config/genesis.json_work
 
-             # generate new key and add to genesis and local prival signer
-             tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
-             cat ${TMHOME}/config/priv_validator_work.json | jq ".Key" > ${TMHOME}/config/priv_validator_key.json
-             cat ${TMHOME}/config/priv_validator_work.json | jq ".LastSignState" > ${TMHOME}/data/priv_validator_state.json
-             cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
-             cat ${TMHOME}/config/genesis.json_work | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
+              # generate new key and add to genesis and local prival signer
+              tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
+              cat ${TMHOME}/config/priv_validator_work.json | jq ".Key" > ${TMHOME}/config/priv_validator_key.json
+              cat ${TMHOME}/config/priv_validator_work.json | jq ".LastSignState" > ${TMHOME}/data/priv_validator_state.json
+              cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
+              cat ${TMHOME}/config/genesis.json_work | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
 
-             rm -rf ${TMHOME}/tmp
-             rm -f  ${TMHOME}/config/genesis.json_work
-             chmod 444 ${TMHOME}/config/genesis.json
+              rm -rf ${TMHOME}/tmp
+              rm -f  ${TMHOME}/config/genesis.json_work
+              chmod 444 ${TMHOME}/config/genesis.json
 
-             touch ${TMHOME}/.INITIALISED
+              touch ${TMHOME}/.INITIALISED
             fi
             rm -f /socks/app.sock
         volumeMounts:
