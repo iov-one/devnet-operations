@@ -16,15 +16,7 @@
       ]
     }
   },
-  "validators": [{
-    "address": "787B37E6B51C2265CA6A971C7C41D7C7D0CE4A30",
-    "pub_key": {
-      "type": "tendermint/PubKeyEd25519",
-      "value": "2H54wMShy7GpHhVNbOUijLEW2BxlqC45eNv1ETUr6zY="
-    },
-    "power": "10",
-    "name": "validator"
-  }],
+  "validators": [],
   "app_hash": "",
   "app_state": {
     "cash": [{
