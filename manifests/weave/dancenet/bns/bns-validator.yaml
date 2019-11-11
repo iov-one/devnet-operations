@@ -43,8 +43,7 @@ spec:
               tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
               cat ${TMHOME}/config/priv_validator_work.json | jq ".Key" > ${TMHOME}/config/priv_validator_key.json
               cat ${TMHOME}/config/priv_validator_work.json | jq ".LastSignState" > ${TMHOME}/data/priv_validator_state.json
-              # cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
-              cat ${TMHOME}/config/priv_validator_key.json | jq 'del(.priv_key)'  | jq ".  |= .+ {\"power\": \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
+              cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
               cat ${TMHOME}/config/genesis.json_work | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
 
               rm -rf ${TMHOME}/tmp
