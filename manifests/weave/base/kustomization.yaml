@@ -3,17 +3,17 @@
 resources:
   - ingress.yaml
   - validator.yaml
-# remove faucet temporary  
-# - faucet-secret.yaml
-# - faucet.yaml
-# - faucet-ingress.yaml
+# remove faucet temporary
+  - faucet-secret.yaml
+  - faucet.yaml
+  - faucet-ingress.yaml
 # generating config maps is as easy as specifying a filename for files and literals key=val
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
 configMapGenerator:
-- name: weave_placeholder-tendermint-config
-  files: 
+- name: bns-tendermint-config
+  files:
   - config.toml
-- name: tm-weave_placeholder-init-config
-  files: 
+- name: tm-bns-init-config
+  files:
   - genesis.json

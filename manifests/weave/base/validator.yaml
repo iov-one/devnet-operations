@@ -2,45 +2,45 @@ apiVersion: v1
 kind: Service
 # A service allows to expose the pods ports for Ingress/Egress
 metadata:
-  name: weave_placeholder
+  name: bns
 spec:
   ports:
   - port: 26657
     name: rpc
   selector:
-    app: weave_placeholder
+    app: bns
 ---
 # A loadbalancer service allows to expose the pods ports to the outside world via an IP
 apiVersion: v1
 kind: Service
 metadata:
-  name: weave_placeholder-p2p
+  name: bns-p2p
 spec:
   ports:
   - port: 26656
     name: p2p
     targetPort: 26656
   selector:
-    app: weave_placeholder
+    app: bns
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: weave_placeholder
+  name: bns
 spec:
-  serviceName: weave_placeholder  
+  serviceName: bns
   replicas: 1
   selector:
     matchLabels:
-      app: weave_placeholder
+      app: bns
   updateStrategy:
     type: RollingUpdate
   podManagementPolicy: Parallel
   template:
     metadata:
       labels:
-        app: weave_placeholder
+        app: bns
     spec:
       affinity:
         podAntiAffinity:
@@ -49,7 +49,7 @@ spec:
               matchExpressions:
               - key: app
                 operator: In
-                values: [weave_placeholder]
+                values: [bns]
             topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       initContainers:
@@ -58,7 +58,7 @@ spec:
         image: iov1/tendermint:0.25.0
         env:
         - name: TMHOME
-          value: /data/tendermint          
+          value: /data/tendermint
         command:
           - bash
           - "-c"
@@ -97,9 +97,9 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
-      - name: weave_placeholder-init
+      - name: bns-init
         imagePullPolicy: Always
-        image: iov1/weave_placeholder:v0.12.0
+        image: iov1/bns:v0.12.0
         command:
         args:
           - '-home=/data/tendermint'
@@ -132,12 +132,12 @@ spec:
         - "-c"
         - |
           set -exo pipefail
-          
-          # wait for weave_placeholder to get started
+
+          # wait for bns to get started
           while [ ! -S /socks/app.sock ]; do
             sleep 1
           done
-          
+
           exec tendermint node \
             --moniker="`hostname`" \
             --log_level="p2p:info,state:info,*:error" \
@@ -185,19 +185,19 @@ spec:
           periodSeconds: 5
           successThreshold: 1
           timeoutSeconds: 2
-      - name: weave_placeholder
+      - name: bns
         imagePullPolicy: Always
-        image: iov1/weave_placeholder:v0.12.0
+        image: iov1/bns:v0.12.0
         args:
-          - '-home=/data/weave_placeholder'
+          - '-home=/data/bns'
           - start
           - '-bind=unix:///socks/app.sock'
         volumeMounts:
         - name: socksdir
           mountPath: /socks
         - name: tmdir
-          mountPath: /data/weave_placeholder
-          subPath: weave_placeholder
+          mountPath: /data/bns
+          subPath: bns
         resources:
           limits:
             cpu: 1100m
@@ -208,10 +208,10 @@ spec:
       volumes:
       - name: tm-initialization
         configMap:
-          name: tm-weave_placeholder-init-config
+          name: tm-bns-init-config
       - name: tm-configuration
         configMap:
-          name: weave_placeholder-tendermint-config
+          name: bns-tendermint-config
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume

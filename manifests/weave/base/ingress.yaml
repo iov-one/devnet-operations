@@ -1,12 +1,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: tendermint-weave_placeholder
+  name: tendermint-bns
 spec:
   rules:
-  - host: weave_placeholder.example.com
+  - host: bns.example.com
     http:
       paths:
       - backend:
-          serviceName: weave_placeholder
-          servicePort: 26657  
+          serviceName: bns
+          servicePort: 26657

@@ -20,7 +20,7 @@ rm -rf /tmp/cert.crt
 rm -rf /tmp/cert.key
 
 kustomize build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
-kustomize build ${manifestsPath}/weave/${networkName}/bns | sed 's/weave_placeholder/bns/' | kubectl apply -f -
+kustomize build ${manifestsPath}/weave/${networkName}/bns | kubectl apply -f -
 kustomize build ${manifestsPath}/wallet/${networkName} | kubectl apply -f -
 kustomize build ${manifestsPath}/governance/${networkName} | kubectl apply -f -
 
