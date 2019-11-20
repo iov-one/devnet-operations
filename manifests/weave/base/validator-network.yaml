@@ -1,25 +1,31 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: faucet
+  name: bns
   labels:
-    app: faucet
+    app: bns
 spec:
   podSelector:
     matchLabels:
-      app: faucet
+      app: bns
   policyTypes:
   - Ingress
   ingress:
   - ports:
-    - port: 8080
+    - port: 26656
     from:
       - ipBlock:
           cidr: '0.0.0.0/0'
   - ports:
-    - port: 8080
+    - port: 26657
+    from:
+      - podSelector:
+          matchLabels:
+            app: faucet
+  - ports:
+    - port: 26660
     from:
     - podSelector:
         matchLabels:
-          app: traefik-private
-          component: controller
+          app: prometheus
+          component: core

@@ -3,10 +3,12 @@
 resources:
   - ingress.yaml
   - validator.yaml
+  - validator-network.yaml
 # remove faucet temporary
   - faucet-secret.yaml
   - faucet.yaml
   - faucet-ingress.yaml
+  - faucet-network.yaml
 # generating config maps is as easy as specifying a filename for files and literals key=val
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
