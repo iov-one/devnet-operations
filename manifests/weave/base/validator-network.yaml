@@ -11,6 +11,10 @@ spec:
   policyTypes:
   - Ingress
   ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            clusterName: bns
   - ports:
     - port: 26656
     from:
