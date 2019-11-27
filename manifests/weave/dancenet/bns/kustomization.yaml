@@ -33,7 +33,7 @@ images:
   newTag: v0.31.11-iov1
 - name: iov1/bns
   newName: iov1/bnsd
-  newTag: v0.21.3
+  newTag: v0.22.0
 - name: iov1/iov-faucet
   newTag: v0.9.0
 configMapGenerator:
