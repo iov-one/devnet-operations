@@ -31,7 +31,7 @@ spec:
               name: faucet-settings
               key: FAUCET_MNEMONIC
         - name: FAUCET_CREDIT_AMOUNT_IOV
-          value: '10'
+          value: '20'
         - name: FAUCET_REFILL_FACTOR
           value: '8'
         - name: FAUCET_REFILL_THRESHOLD
