@@ -66,11 +66,11 @@ spec:
       - name: tendermint
         resources:
           limits:
-            cpu: 1500m
-            memory: 4Gi
+            cpu: 1000m
+            memory: 1Gi
           requests:
-            cpu: 750m
-            memory: 2Gi
+            cpu: 550m
+            memory: 0.5Gi
         readinessProbe:
           exec:
             command:
@@ -86,7 +86,7 @@ spec:
         resources:
           limits:
             cpu: 1500m
-            memory: 12Gi
+            memory: 2Gi
           requests:
-            cpu: 750m
-            memory: 8Gi
+            cpu: 450m
+            memory: 1Gi
