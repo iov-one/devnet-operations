@@ -36,7 +36,7 @@ spec:
               key: dbname
         ports:
         - containerPort: 5432
-          name: block-metrics-db
+          name: block-mt
         volumeMounts:
         - name: block-metrics-db-persistent-storage
           mountPath: /var/lib/postgres
