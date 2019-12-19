@@ -1,0 +1,57 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: block-metrics-db
+  labels:
+    app: block-metrics-db
+spec:
+  selector:
+    matchLabels:
+      app: block-metrics-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: block-metrics-db
+    spec:
+      containers:
+      - image: postgres:latest
+        name: block-metrics-db
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: block-metrics-db-settings
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: block-metrics-db-settings
+              key: pass
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: block-metrics-db-settings
+              key: dbname
+        ports:
+        - containerPort: 5432
+          name: block-metrics-db
+        volumeMounts:
+        - name: block-metrics-db-persistent-storage
+          mountPath: /var/lib/postgres
+      volumes:
+      - name: block-metrics-db-persistent-storage
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: block-metrics-db 
+  labels:
+    app: block-metrics-db
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: block-metrics-db
