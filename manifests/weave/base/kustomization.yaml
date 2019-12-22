@@ -4,7 +4,7 @@ resources:
   - ingress.yaml
   - validator.yaml
   - validator-network.yaml
-# remove faucet temporary
+  # faucet
   - faucet-secret.yaml
   - faucet.yaml
   - faucet-ingress.yaml

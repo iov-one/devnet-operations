@@ -1,3 +1,0 @@
-- op: replace
-  path: /spec/template/spec/containers/0/volumeMounts/0/mountPath
-  value: /assets/static/config/conf.json
