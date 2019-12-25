@@ -15,6 +15,12 @@ spec:
       labels:
         app: block-metrics-db
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 2000
+        fsGroup: 2000
+      serviceAccountName: bns
       containers:
       - image: postgres:latest
         name: block-metrics-db
@@ -28,7 +34,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: block-metrics-db-settings
-              key: pass
+              key: password
         - name: DB_NAME
           valueFrom:
             secretKeyRef:
@@ -36,13 +42,15 @@ spec:
               key: dbname
         ports:
         - containerPort: 5432
-          name: block-mt
+          name: block-mt-port
         volumeMounts:
-        - name: block-metrics-db-persistent-storage
-          mountPath: /var/lib/postgres
+            - mountPath: /var/lib/postgresql/data
+              name: block-metrics-db-vl
       volumes:
-      - name: block-metrics-db-persistent-storage
-        emptyDir: {}
+        - name: block-metrics-db-vl
+          gcePersistentDisk:
+            pdName: block-metrics-db-vl
+            fsType: ext4
 ---
 apiVersion: v1
 kind: Service
