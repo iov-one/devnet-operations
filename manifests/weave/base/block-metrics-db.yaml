@@ -44,13 +44,23 @@ spec:
         - containerPort: 5432
           name: block-mt-port
         volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: block-metrics-db-vl
+            - name: block-metrics-db-storage 
+              mountPath: /var/lib/postgresql/data
       volumes:
-        - name: block-metrics-db-vl
-          gcePersistentDisk:
-            pdName: block-metrics-db-vl
-            fsType: ext4
+        - name: block-metrics-db-storage
+          persistentVolumeClaim:
+            claimName: block-metrics-storage-volume
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: block-metrics-storage-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: Service
