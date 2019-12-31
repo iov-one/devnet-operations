@@ -86,34 +86,6 @@ spec:
             readOnly: true
           - mountPath: /socks
             name: socksdir
-<<<<<<< Updated upstream
-        resources:
-          limits:
-            cpu: 150m
-            memory: 150Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
-      - name: weave_placeholder-init
-        imagePullPolicy: Always
-        image: iov1/weave_placeholder:v0.12.0
-        command:
-        args:
-          - '-home=/data/tendermint'
-          - init
-          - '-i'
-        volumeMounts:
-          - name: tmdir
-            mountPath: "/data"
-        resources:
-          limits:
-            cpu: 150m
-            memory: 150Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
-=======
->>>>>>> Stashed changes
       containers:
       - name: tendermint
         imagePullPolicy: Always
@@ -179,11 +151,7 @@ spec:
           timeoutSeconds: 2
       - name: weave_placeholder
         imagePullPolicy: Always
-<<<<<<< Updated upstream
-        image: iov1/weave_placeholder:v0.12.0
-=======
         image: iov1/bnsd:v0.21.0
->>>>>>> Stashed changes
         args:
           - '-home=/data/weave_placeholder'
           - start
@@ -192,20 +160,8 @@ spec:
         - name: socksdir
           mountPath: /socks
         - name: tmdir
-<<<<<<< Updated upstream
-          mountPath: /data/weave_placeholder
-          subPath: weave_placeholder
-        resources:
-          limits:
-            cpu: 1100m
-            memory: 2.5Gi
-          requests:
-            cpu: 550m
-            memory: 512Mi
-=======
           mountPath: /data/bns
           subPath: bns
->>>>>>> Stashed changes
       volumes:
       - name: tm-initialization
         configMap:
