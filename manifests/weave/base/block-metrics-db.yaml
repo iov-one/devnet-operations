@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: block-metrics-db
+  name: block-metrics-db 
   labels:
     app: block-metrics-db
 spec:
@@ -16,22 +16,24 @@ spec:
         app: block-metrics-db
     spec:
       securityContext:
-        runAsNonRoot: true
+##        runAsNonRoot: true
         runAsUser: 1000
-        runAsGroup: 2000
-        fsGroup: 2000
+##        runAsGroup: 2000
+##        fsGroup: 2000
       serviceAccountName: bns
       containers:
       - image: postgres:latest
         name: block-metrics-db
         env:
+        - name: PGDATA
+          value: "/var/lib/postgresql/data/pgdata"
         - name: DB_USER
           valueFrom:
             secretKeyRef:
               name: block-metrics-db-settings
               key: username
         - name: DB_PASS
-          valueFrom:
+          valueFrom: 
             secretKeyRef:
               name: block-metrics-db-settings
               key: password
@@ -43,18 +45,28 @@ spec:
         ports:
         - containerPort: 5432
           name: block-mt-port
+##        volumeMounts:
+##          - name: block-metrics-storage-volume
+##            mountPath: /var/lib/postgresql/data
+##      initContainers:
+##        - name: pgsql-data-permission-fix
+##          image: busybox
+##          command: ["/bin/chmod","-R","777", "/data"]
         volumeMounts:
-            - name: block-metrics-db-storage 
-              mountPath: /var/lib/postgresql/data
+        - name: block-metrics-volume-mount
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
       volumes:
-        - name: block-metrics-db-storage
-          persistentVolumeClaim:
-            claimName: block-metrics-storage-volume
+      - name: block-metrics-volume-mount
+        persistentVolumeClaim:
+          claimName: block-metrics-db-pvc
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: block-metrics-storage-volume
+  name: block-metrics-db-pvc
+  labels:
+    type: local
 spec:
   accessModes:
     - ReadWriteOnce
