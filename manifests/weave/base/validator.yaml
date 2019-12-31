@@ -36,7 +36,6 @@ spec:
       app: weave_placeholder
   updateStrategy:
     type: RollingUpdate
-  podManagementPolicy: Parallel
   template:
     metadata:
       labels:
@@ -55,7 +54,7 @@ spec:
       initContainers:
       - name: tm-gen-validator
         imagePullPolicy: Always
-        image: iov1/tendermint:0.25.0
+        image: iov1/tendermint:0.31.5
         env:
         - name: TMHOME
           value: /data/tendermint          
@@ -72,12 +71,9 @@ spec:
              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
 
              # extract pub key and node_id for nginx
-             tendermint gen_validator > /data/tendermint/config/priv_validator_work.json
-             cat /data/tendermint/config/priv_validator_work.json | jq ".Key" > /data/tendermint/config/priv_validator_key.json
-             cat /data/tendermint/config/priv_validator_work.json | jq ".LastSignState" > /data/tendermint/data/priv_validator_state.json
-             cat /data/tendermint/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
+             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" > /data/tendermint/tmp/export_pub_key1.json
+             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
              cat ${TMHOME}/config/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
-             rm -rf ${TMHOME}/tmp
              touch ${TMHOME}/.INITIALISED
             fi
             rm -f /socks/app.sock
@@ -90,6 +86,7 @@ spec:
             readOnly: true
           - mountPath: /socks
             name: socksdir
+<<<<<<< Updated upstream
         resources:
           limits:
             cpu: 150m
@@ -115,10 +112,12 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+=======
+>>>>>>> Stashed changes
       containers:
       - name: tendermint
         imagePullPolicy: Always
-        image: iov1/tendermint:0.25.0
+        image: iov1/tendermint:0.31.5
         ports:
         - containerPort: 26656
           name: p2p
@@ -154,21 +153,14 @@ spec:
           mountPath: /socks
         - name: tm-rw-volume
           mountPath: /tmp
-        resources:
-          limits:
-            cpu: 1100m
-            memory: 4Gi
-          requests:
-            cpu: 750m
-            memory: 2Gi
         readinessProbe:
           exec:
             command:
-            - sh
-            - -o
-            - pipefail
-            - -ec
-            - 'curl -s --fail http://localhost:26657/status | jq --exit-status ".result.sync_info.catching_up==false"'
+              - sh
+              - -o
+              - pipefail
+              - -ec
+              - 'curl -s --fail http://localhost:26657/abci_info | jq --exit-status ".result.response"'
           failureThreshold: 999999
           periodSeconds: 20
           initialDelaySeconds: 40
@@ -187,7 +179,11 @@ spec:
           timeoutSeconds: 2
       - name: weave_placeholder
         imagePullPolicy: Always
+<<<<<<< Updated upstream
         image: iov1/weave_placeholder:v0.12.0
+=======
+        image: iov1/bnsd:v0.21.0
+>>>>>>> Stashed changes
         args:
           - '-home=/data/weave_placeholder'
           - start
@@ -196,6 +192,7 @@ spec:
         - name: socksdir
           mountPath: /socks
         - name: tmdir
+<<<<<<< Updated upstream
           mountPath: /data/weave_placeholder
           subPath: weave_placeholder
         resources:
@@ -205,6 +202,10 @@ spec:
           requests:
             cpu: 550m
             memory: 512Mi
+=======
+          mountPath: /data/bns
+          subPath: bns
+>>>>>>> Stashed changes
       volumes:
       - name: tm-initialization
         configMap:
@@ -222,7 +223,6 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
-      storageClassName: standard
       resources:
         requests:
-          storage: 30Gi
+          storage: 1Gi
