@@ -1,24 +1,14 @@
 # a list of all the manifests required, make sure to add a file here if you add it to
 # this folder
 resources:
-  #- ingress.yaml
   - validator.yaml
-  #- validator-network.yaml
-  # faucet
-  #- faucet-secret.yaml
-  #- faucet.yaml
-  #- faucet-ingress.yaml
-  #- faucet-network.yaml
-  # block metrics db
-  #- block-metrics-db-secret.yaml
-  #- block-metrics-db.yaml
 # generating config maps is as easy as specifying a filename for files and literals key=val
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
 configMapGenerator:
-- name: weave_placeholder-tendermint-config
+- name: weaveplaceholder-tendermint-config
   files: 
   - config.toml
-- name: tm-weave_placeholder-init-config
+- name: tm-weaveplaceholder-init-config
   files: 
   - genesis.json

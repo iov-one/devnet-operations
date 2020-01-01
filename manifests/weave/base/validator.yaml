@@ -2,44 +2,44 @@ apiVersion: v1
 kind: Service
 # A service allows to expose the pods ports for Ingress/Egress
 metadata:
-  name: weave_placeholder
+  name: weaveplaceholder
 spec:
   ports:
   - port: 26657
     name: rpc
   selector:
-    app: weave_placeholder
+    app: weaveplaceholder
 ---
 # A loadbalancer service allows to expose the pods ports to the outside world via an IP
 apiVersion: v1
 kind: Service
 metadata:
-  name: weave_placeholder-p2p
+  name: weaveplaceholder-p2p
 spec:
   ports:
   - port: 26656
     name: p2p
     targetPort: 26656
   selector:
-    app: weave_placeholder
+    app: weaveplaceholder
   type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: weave_placeholder
+  name: weaveplaceholder
 spec:
-  serviceName: weave_placeholder  
+  serviceName: weaveplaceholder  
   replicas: 1
   selector:
     matchLabels:
-      app: weave_placeholder
+      app: weaveplaceholder
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: weave_placeholder
+        app: weaveplaceholder
     spec:
       affinity:
         podAntiAffinity:
@@ -48,44 +48,78 @@ spec:
               matchExpressions:
               - key: app
                 operator: In
-                values: [weave_placeholder]
+                values: [weaveplaceholder]
             topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       initContainers:
-      - name: tm-gen-validator
-        imagePullPolicy: Always
-        image: iov1/tendermint:v0.31.5
+      - args:
+        - |
+          set -exo pipefail
+          if [ ! -f ${TMHOME}/.INITIALISED ]; then
+           mkdir -p /data/bns
+           mkdir -p ${TMHOME}/tmp
+           tendermint init
+
+           cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+           cat ${TMHOME}/config/genesis.json > ${TMHOME}/config/genesis.json_work
+
+           # generate new key and add to genesis and local prival signer
+           tendermint gen_validator > ${TMHOME}/config/priv_validator_work.json
+           cat ${TMHOME}/config/priv_validator_work.json | jq ".Key" > ${TMHOME}/config/priv_validator_key.json
+           cat ${TMHOME}/config/priv_validator_work.json | jq ".LastSignState" > ${TMHOME}/data/priv_validator_state.json
+           cat ${TMHOME}/config/priv_validator_key.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
+           cat ${TMHOME}/config/genesis.json_work | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
+
+           rm -rf ${TMHOME}/tmp
+           rm -f  ${TMHOME}/config/genesis.json_work
+           chmod 444 ${TMHOME}/config/genesis.json
+
+           touch ${TMHOME}/.INITIALISED
+          fi
+          rm -f /socks/app.sock
+        command:
+        - bash
+        - -c
         env:
         - name: TMHOME
-          value: /data/tendermint          
-        command:
-          - bash
-          - "-c"
-        args:
-          - |
-            set -exo pipefail
-            if [ ! -f ${TMHOME}/.INITIALISED ]; then
-             mkdir -p /data/bns
-             mkdir -p ${TMHOME}/tmp
-             tendermint init
-             cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
-
-             # extract pub key and node_id for nginx
-             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" > /data/tendermint/tmp/export_pub_key1.json
-             cat /data/tendermint/config/priv_validator.json | jq ".pub_key" | jq ". as \$k | {pub_key: \$k, power: \"10\", name: \"validator\"}" > ${TMHOME}/tmp/pub_validator.json
-             cat ${TMHOME}/config/genesis.json | jq ".validators |= .+ [$(cat ${TMHOME}/tmp/pub_validator.json)]" > ${TMHOME}/config/genesis.json
-             touch ${TMHOME}/.INITIALISED
-            fi
-            rm -f /socks/app.sock
+          value: /data/tendermint
+        image: iov1/tendermint:v0.31.5
+        imagePullPolicy: Always
+        name: tm-gen-validator
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
         volumeMounts:
-          - name: tmdir
-            mountPath: "/data"
-          - mountPath: /etc/tendermint/genesis.json
-            name: tm-initialization
-            subPath: genesis.json
-            readOnly: true
-          - mountPath: /socks
-            name: socksdir
+        - mountPath: /data
+          name: tmdir
+        - mountPath: /etc/tendermint/genesis.json
+          name: tm-initialization
+          readOnly: true
+          subPath: genesis.json
+        - mountPath: /socks
+          name: socksdir
+      - args:
+        - -home=/data/tendermint
+        - init
+        - -i
+        command: null
+        image: iov1/bnsd:v0.21.0
+        imagePullPolicy: Always
+        name: weaveplaceholder-init
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /data
+          name: tmdir
       containers:
       - name: tendermint
         imagePullPolicy: Always
@@ -104,7 +138,7 @@ spec:
         - |
           set -exo pipefail
           
-          # wait for weave_placeholder to get started
+          # wait for weaveplaceholder to get started
           while [ ! -S /socks/app.sock ]; do
             sleep 1
           done
@@ -149,11 +183,11 @@ spec:
           periodSeconds: 5
           successThreshold: 1
           timeoutSeconds: 2
-      - name: weave_placeholder
+      - name: weaveplaceholder
         imagePullPolicy: Always
         image: iov1/bnsd:v0.21.0
         args:
-          - '-home=/data/weave_placeholder'
+          - '-home=/data/weaveplaceholder'
           - start
           - '-bind=unix:///socks/app.sock'
         volumeMounts:
@@ -165,10 +199,10 @@ spec:
       volumes:
       - name: tm-initialization
         configMap:
-          name: tm-weave_placeholder-init-config
+          name: tm-weaveplaceholder-init-config
       - name: tm-configuration
         configMap:
-          name: weave_placeholder-tendermint-config
+          name: weaveplaceholder-tendermint-config
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume
