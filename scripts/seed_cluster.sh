@@ -21,8 +21,6 @@ rm -rf /tmp/cert.key
 
 kustomize build ${manifestsPath}/traefik/${networkName} | kubectl apply -f -
 kustomize build ${manifestsPath}/weave/${networkName}/bns | kubectl apply -f -
-kustomize build ${manifestsPath}/wallet/${networkName} | kubectl apply -f -
-kustomize build ${manifestsPath}/governance/${networkName} | kubectl apply -f -
 
 # experimental: set DNS records
 # public traefik
