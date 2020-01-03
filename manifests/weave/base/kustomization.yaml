@@ -9,13 +9,13 @@ resources:
 configMapGenerator:
 - name: weaveplaceholder-tendermint-config
   files: 
-  - config.toml
+  - validator/config.toml
 - name: tm-weaveplaceholder-init-config
   files: 
-  - genesis.json
+  - validator/genesis.json
 - name: seed-tendermint-config
   files: 
-  - config-seed.toml
-- name: tm-seed-init-genesis
+  - seed/config.toml
+- name: tm-seed-init-config
   files: 
-  - genesis-seed.json
+  - seed/genesis.json

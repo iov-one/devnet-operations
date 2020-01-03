@@ -1,0 +1,1552 @@
+apiVersion: v1
+data:
+  config.toml: |-
+    # This is a TOML config file.
+    # For more information, see https://github.com/toml-lang/toml
+
+    ##### main base config options #####
+
+    # TCP or UNIX socket address of the ABCI application,
+    # or the name of an ABCI application compiled in with the Tendermint binary
+    proxy_app = "tcp://127.0.0.1:26658"
+
+    # A custom human readable name for this node
+    moniker = ""
+
+    # If this node is many blocks behind the tip of the chain, FastSync
+    # allows them to catchup quickly by downloading blocks in parallel
+    # and verifying their commits
+    fast_sync = true
+
+    # Database backend: leveldb | memdb | cleveldb
+    db_backend = "leveldb"
+
+    # Database directory
+    db_dir = "data"
+
+    # Output level for logging, including package level options
+    log_level = "main:info,state:info,*:error"
+
+    # Output format: 'plain' (colored text) or 'json'
+    log_format = "plain"
+
+    ##### additional base config options #####
+    # Path to the JSON file containing the initial validator set and other meta data
+    genesis_file = "config/genesis.json"
+    # Path to the JSON file containing the private key to use as a validator in the consensus protocol
+    priv_validator_key_file = "config/priv_validator_key.json"
+    # Path to the JSON file containing the last sign state of a validator
+    priv_validator_state_file = "data/priv_validator_state.json"
+    # TCP or UNIX socket address for Tendermint to listen on for
+    # connections from an external PrivValidator process
+    priv_validator_laddr = ""
+    # Path to the JSON file containing the private key to use for node authentication in the p2p protocol
+    node_key_file = "config/node_key.json"
+    # Mechanism to connect to the ABCI application: socket | grpc
+    abci = "socket"
+    # TCP or UNIX socket address for the profiling server to listen on
+    prof_laddr = ""
+    # If true, query the ABCI app on connecting to a new peer
+    # so the app can decide if we should keep the connection or not
+    filter_peers = false
+    ##### advanced configuration options #####
+    ##### rpc server configuration options #####
+    [rpc]
+    # TCP or UNIX socket address for the RPC server to listen on
+    laddr = "tcp://0.0.0.0:26657"
+    # A list of origins a cross-domain request can be executed from
+    # Default value '[]' disables cors support
+    # Use '["*"]' to allow any origin
+    cors_allowed_origins = ["*"]
+    # A list of methods the client is allowed to use with cross-domain requests
+    cors_allowed_methods = ["HEAD", "GET", "POST", ]
+    # A list of non simple headers the client is allowed to use with cross-domain requests
+    cors_allowed_headers = ["Origin", "Accept", "Content-Type", "X-Requested-With", "X-Server-Time", ]
+    # TCP or UNIX socket address for the gRPC server to listen on
+    # NOTE: This server only supports /broadcast_tx_commit
+    grpc_laddr = ""
+    # Maximum number of simultaneous connections.
+    # Does not include RPC (HTTP&WebSocket) connections. See max_open_connections
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
+    # 1024 - 40 - 10 - 50 = 924 = ~900
+    grpc_max_open_connections = 900
+    # Activate unsafe RPC commands like /dial_seeds and /unsafe_flush_mempool
+    unsafe = false
+    # Maximum number of simultaneous connections (including WebSocket).
+    # Does not include gRPC connections. See grpc_max_open_connections
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
+    # 1024 - 40 - 10 - 50 = 924 = ~900
+    max_open_connections = 900
+    ##### peer to peer configuration options #####
+    [p2p]
+    # Address to listen for incoming connections
+    laddr = "tcp://0.0.0.0:26656"
+    # Address to advertise to peers for them to dial
+    # If empty, will use the same port as the laddr,
+    # and will introspect on the listener or use UPnP
+    # to figure out the address.
+    external_address = ""
+    # Comma separated list of seed nodes to connect to
+    seeds = ""
+    # Comma separated list of nodes to keep persistent connections to
+    persistent_peers = ""
+    # UPNP port forwarding
+    upnp = false
+    # Path to address book
+    addr_book_file = "config/addrbook.json"
+    # Set true for strict address routability rules
+    # Set false for private or local networks
+    addr_book_strict = true
+    # Maximum number of inbound peers
+    max_num_inbound_peers = 40
+    # Maximum number of outbound peers to connect to, excluding persistent peers
+    max_num_outbound_peers = 50
+    # Time to wait before flushing messages out on the connection
+    flush_throttle_timeout = "100ms"
+    # Maximum size of a message packet payload, in bytes
+    max_packet_msg_payload_size = 1024
+    # Rate at which packets can be sent, in bytes/second
+    send_rate = 5120000
+    # Rate at which packets can be received, in bytes/second
+    recv_rate = 5120000
+    # Set true to enable the peer-exchange reactor
+    pex = true
+    # Seed mode, in which node constantly crawls the network and looks for
+    # peers. If another node asks it for addresses, it responds and disconnects.
+    #
+    # Does not work if the peer-exchange reactor is disabled.
+    seed_mode = true
+    # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
+    private_peer_ids = ""
+    # Toggle to disable guard against peers connecting from the same ip.
+    allow_duplicate_ip = false
+    # Peer connection configuration.
+    handshake_timeout = "35s"
+    dial_timeout = "10s"
+    ##### mempool configuration options #####
+    [mempool]
+    recheck = true
+    broadcast = true
+    wal_dir = ""
+    # size of the mempool
+    size = 1
+    # size of the cache (used to filter transactions we saw earlier)
+    cache_size = 10000
+    ##### consensus configuration options #####
+    [consensus]
+    wal_file = "data/cs.wal/wal"
+    timeout_propose = "3s"
+    timeout_propose_delta = "500ms"
+    timeout_prevote = "1s"
+    timeout_prevote_delta = "500ms"
+    timeout_precommit = "1s"
+    timeout_precommit_delta = "500ms"
+    timeout_commit = "1s"
+    # Make progress as soon as we have all the precommits (as if TimeoutCommit = 0)
+    skip_timeout_commit = false
+    # EmptyBlocks mode and possible interval between empty blocks
+    create_empty_blocks = true
+    create_empty_blocks_interval = "0s"
+    # Reactor sleep duration parameters
+    peer_gossip_sleep_duration = "100ms"
+    peer_query_maj23_sleep_duration = "2s"
+    # Block time parameters. Corresponds to the minimum time increment between consecutive blocks.
+    blocktime_iota = "1s"
+    ##### transactions indexer configuration options #####
+    [tx_index]
+    # What indexer to use for transactions
+    #
+    # Options:
+    #   1) "null"
+    #   2) "kv" (default) - the simplest possible indexer, backed by key-value storage (defaults to levelDB; see DBBackend).
+    indexer = "kv"
+    # Comma-separated list of tags to index (by default the only tag is "tx.hash")
+    #
+    # You can also index transactions by height by adding "tx.height" tag here.
+    #
+    # It's recommended to index only a subset of tags due to possible memory
+    # bloat. This is, of course, depends on the indexer's DB and the volume of
+    # transactions.
+    index_tags = ""
+    # When set to true, tells indexer to index all tags (predefined tags:
+    # "tx.hash", "tx.height" and all tags from DeliverTx responses).
+    #
+    # Note this may be not desirable (see the comment above). IndexTags has a
+    # precedence over IndexAllTags (i.e. when given both, IndexTags will be
+    # indexed).
+    index_all_tags = true
+    ##### instrumentation configuration options #####
+    [instrumentation]
+    # When true, Prometheus metrics are served under /metrics on
+    # PrometheusListenAddr.
+    # Check out the documentation for the list of available metrics.
+    prometheus = true
+    # Address to listen for Prometheus collector(s) connections
+    prometheus_listen_addr = ":26660"
+    # Maximum number of simultaneous connections.
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    max_open_connections = 3
+    # Instrumentation namespace
+    namespace = "tendermint"
+kind: ConfigMap
+metadata:
+  name: seed-tendermint-config-8ct5h44kc5
+---
+apiVersion: v1
+data:
+  genesis.json: |-
+    {
+        "genesis_time": "2019-03-19T15:32:11.118591Z",
+        "chain_id": "iov-boarnet",
+        "consensus_params": {
+            "block": {
+                "max_bytes": "22020096",
+                "max_gas": "-1",
+                "time_iota_ms": "1000"
+            },
+            "evidence": {
+                "max_age": "100000"
+            },
+            "validator": {
+                "pub_key_types": [
+                    "ed25519"
+                ]
+            }
+        },
+        "validators": [
+            {
+                "address": "86BCD0653BD216EDF927B4C8B606C7B8FCEDCD59",
+                "pub_key": {
+                    "type": "tendermint/PubKeyEd25519",
+                    "value": "dzfc09IYMiNe761eBwaLOUCxsgwR+q5MlSTTplsKcmE="
+                },
+                "power": "10",
+                "name": "validator"
+            }
+        ],
+        "app_hash": "",
+        "app_state": {
+            "cash": [
+                {
+                    "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91",
+                    "//name": "Anton",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81",
+                    "//name": "Betty",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA",
+                    "//name": "Dilip",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "DCE021F4ABECB14611255B520C97B3025A07E140",
+                    "//name": "Emily",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D",
+                    "//name": "Faisal",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE",
+                    "//name": "Giesela",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "28691FFE125E01B306614121EAC07FEA14917781",
+                    "//name": "Harry",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "AD102CF85A366D726BBBCA54DBD3818B6278A66A",
+                    "//name": "Ingrid",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "0EDAA1225975A3A64BC7216F9429A3EA34A757D9",
+                    "//name": "Jonny",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+                    "//name": "Cloe",
+                    "coins": [
+                        "123456789 IOV"
+                    ]
+                },
+                {
+                    "address": "cond:gov/rule/0000000000000002",
+                    "//name": "reward fund",
+                    "coins": [
+                        {
+                            "whole": 1,
+                            "ticker": "IOV"
+                        }
+                    ]
+                },
+                {
+                    "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
+                    "//name": "faucet",
+                    "coins": [
+                        {
+                            "whole": 999999999,
+                            "ticker": "IOV"
+                        }
+                    ]
+                },
+                {
+                    "address": "B1DE2F431945B8D7CE20DDD5F43FDA9609E9D7B8",
+                    "//name": "loadtester",
+                    "coins": [
+                        {
+                            "whole": 999999999,
+                            "ticker": "IOV"
+                        }
+                    ]
+                }
+            ],
+            "currencies": [
+                {
+                    "ticker": "IOV",
+                    "name": "Main token of this chain"
+                }
+            ],
+            "multisig": [
+                {
+                    "activation_threshold": 1,
+                    "admin_threshold": 1,
+                    "participants": [
+                        {
+                            "signature": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+                            "//name": "Cloe",
+                            "weight": 1
+                        }
+                    ]
+                }
+            ],
+            "update_validators": {
+                "addresses": [
+                    "cond:gov/rule/0000000000000004"
+                ]
+            },
+            "distribution": [
+                {
+                    "//name": "unused - owned by economic committee",
+                    "admin": "cond:gov/rule/0000000000000002",
+                    "destinations": [
+                        {
+                            "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
+                            "weight": 1
+                        }
+                    ]
+                }
+            ],
+            "escrow": [
+                {
+                    "//name": "guarantee fund",
+                    "amount": [
+                        {
+                            "ticker": "IOV",
+                            "whole": 1000000
+                        }
+                    ],
+                    "arbiter": "cond:gov/rule/0000000000000002",
+                    "destination": "cond:gov/rule/0000000000000002",
+                    "//destination": "reward fund - cash account",
+                    "source": "0000000000000000000000000000000000000000",
+                    "timeout": "2999-12-31T00:00:00Z"
+                }
+            ],
+            "conf": {
+                "username": {
+                    "owner": "cond:gov/rule/0000000000000001",
+                    "valid_username_name": "^[a-z0-9\\-_.]{3,64}$",
+                    "valid_username_label": "^iov$"
+                },
+                "cash": {
+                    "collector_address": "cond:gov/rule/0000000000000002",
+                    "//collector_address": "reward fond - cash account",
+                    "minimal_fee": "0.05 IOV"
+                },
+                "migration": {
+                    "admin": "cond:gov/rule/0000000000000003",
+                    "//admin": "owned by tech committee"
+                }
+            },
+            "msgfee": [
+                {
+                    "fee": "100 IOV",
+                    "msg_path": "username/register_token"
+                },
+                {
+                    "fee": "10 IOV",
+                    "msg_path": "username/change_token_targets"
+                },
+                {
+                    "fee": "50 IOV",
+                    "msg_path": "username/transfer_token"
+                }
+            ],
+            "governance": {
+                "electorate": [
+                    {
+                        "title": "Governing Board",
+                        "admin": "cond:gov/rule/0000000000000001",
+                        "electors": [
+                            {
+                                "//name": "Anton",
+                                "weight": 15,
+                                "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+                            },
+                            {
+                                "//name": "Betty",
+                                "weight": 15,
+                                "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+                            },
+                            {
+                                "//name": "Cloe",
+                                "weight": 10,
+                                "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                            },
+                            {
+                                "//name": "Emily",
+                                "weight": 10,
+                                "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Economic Committee",
+                        "admin": "cond:gov/rule/0000000000000001",
+                        "electors": [
+                            {
+                                "//name": "Anton",
+                                "weight": 15,
+                                "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+                            },
+                            {
+                                "//name": "Dilip",
+                                "weight": 20,
+                                "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+                            },
+                            {
+                                "//name": "Gisela",
+                                "weight": 5,
+                                "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Tech Committee",
+                        "admin": "cond:gov/rule/0000000000000001",
+                        "electors": [
+                            {
+                                "//name": "Betty",
+                                "weight": 15,
+                                "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+                            },
+                            {
+                                "//name": "Dilip",
+                                "weight": 15,
+                                "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+                            },
+                            {
+                                "//name": "Emily",
+                                "weight": 10,
+                                "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+                            },
+                            {
+                                "//name": "Faisal",
+                                "weight": 10,
+                                "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Validator Committee",
+                        "admin": "cond:gov/rule/0000000000000001",
+                        "electors": [
+                            {
+                                "//name": "Cloe",
+                                "weight": 15,
+                                "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                            },
+                            {
+                                "//name": "Faisal",
+                                "weight": 10,
+                                "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+                            },
+                            {
+                                "//name": "Giesela",
+                                "weight": 15,
+                                "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+                            }
+                        ]
+                    }
+                ],
+                "rules": [
+                    {
+                        "admin": "cond:gov/rule/0000000000000001",
+                        "title": "Governing Board",
+                        "voting_period": "5m",
+                        "threshold": {
+                            "numerator": 2,
+                            "denominator": 3
+                        },
+                        "electorate_id": 1
+                    },
+                    {
+                        "admin": "cond:gov/rule/0000000000000002",
+                        "title": "Economic Committee",
+                        "voting_period": "5m",
+                        "threshold": {
+                            "numerator": 1,
+                            "denominator": 2
+                        },
+                        "quorum": {
+                            "numerator": 1,
+                            "denominator": 2
+                        },
+                        "electorate_id": 2
+                    },
+                    {
+                        "admin": "cond:gov/rule/0000000000000003",
+                        "title": "Tech Committee",
+                        "voting_period": "5m",
+                        "threshold": {
+                            "numerator": 1,
+                            "denominator": 2
+                        },
+                        "electorate_id": 3
+                    },
+                    {
+                        "admin": "cond:gov/rule/0000000000000004",
+                        "title": "Validator Committee",
+                        "voting_period": "5m",
+                        "threshold": {
+                            "numerator": 1,
+                            "denominator": 2
+                        },
+                        "quorum": {
+                            "numerator": 1,
+                            "denominator": 2
+                        },
+                        "electorate_id": 4
+                    }
+                ]
+            },
+            "initialize_schema": [
+                {
+                    "pkg": "aswap",
+                    "ver": 1
+                },
+                {
+                    "pkg": "batch",
+                    "ver": 1
+                },
+                {
+                    "pkg": "cash",
+                    "ver": 1
+                },
+                {
+                    "pkg": "cron",
+                    "ver": 1
+                },
+                {
+                    "pkg": "currency",
+                    "ver": 1
+                },
+                {
+                    "pkg": "distribution",
+                    "ver": 1
+                },
+                {
+                    "pkg": "escrow",
+                    "ver": 1
+                },
+                {
+                    "pkg": "gov",
+                    "ver": 1
+                },
+                {
+                    "pkg": "hashlock",
+                    "ver": 1
+                },
+                {
+                    "pkg": "msgfee",
+                    "ver": 1
+                },
+                {
+                    "pkg": "multisig",
+                    "ver": 1
+                },
+                {
+                    "pkg": "namecoin",
+                    "ver": 1
+                },
+                {
+                    "pkg": "username",
+                    "ver": 1
+                },
+                {
+                    "pkg": "paychan",
+                    "ver": 1
+                },
+                {
+                    "pkg": "sigs",
+                    "ver": 1
+                },
+                {
+                    "pkg": "utils",
+                    "ver": 1
+                },
+                {
+                    "pkg": "validators",
+                    "ver": 1
+                }
+            ],
+            "username": [
+                {
+                    "username": "cnn.com*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+                    "//name": "Cloe"
+                },
+                {
+                    "username": "dave.iov.one*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+                    "//name": "Cloe"
+                },
+                {
+                    "username": "atom*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "buggy*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "child*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "driver*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "economy*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "friend*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "girl*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                    "username": "heat*iov",
+                    "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                }
+            ]
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: tm-seed-init-config-6thbbdct5m
+---
+apiVersion: v1
+data:
+  genesis.json: |-
+    {
+      "genesis_time": "2019-03-19T15:32:11.118591Z",
+      "chain_id": "iov-boarnet",
+      "consensus_params": {
+        "block": {
+          "max_bytes": "22020096",
+          "max_gas": "-1",
+          "time_iota_ms": "1000"
+        },
+        "evidence": {
+          "max_age": "100000"
+        },
+        "validator": {
+          "pub_key_types": [
+            "ed25519"
+          ]
+        }
+      },
+      "validators": [],
+      "app_hash": "",
+      "app_state": {
+        "cash": [
+          {
+            "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91",
+            "//name": "Anton",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "hex:BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81",
+            "//name": "Betty",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA",
+            "//name": "Dilip",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "DCE021F4ABECB14611255B520C97B3025A07E140",
+            "//name": "Emily",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D",
+            "//name": "Faisal",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE",
+            "//name": "Giesela",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "28691FFE125E01B306614121EAC07FEA14917781",
+            "//name": "Harry",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "AD102CF85A366D726BBBCA54DBD3818B6278A66A",
+            "//name": "Ingrid",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "0EDAA1225975A3A64BC7216F9429A3EA34A757D9",
+            "//name": "Jonny",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+            "//name": "Cloe",
+            "coins": [
+              "123456789 IOV"
+            ]
+          },
+          {
+            "address": "cond:gov/rule/0000000000000002",
+            "//name": "reward fund",
+            "coins": [
+              {
+                "whole": 1,
+                "ticker": "IOV"
+              }
+            ]
+          },
+          {
+            "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
+            "//name": "faucet",
+            "coins": [
+              {
+                "whole": 999999999,
+                "ticker": "IOV"
+              }
+            ]
+          },
+          {
+            "address": "B1DE2F431945B8D7CE20DDD5F43FDA9609E9D7B8",
+            "//name": "loadtester",
+            "coins": [
+              {
+                "whole": 999999999,
+                "ticker": "IOV"
+              }
+            ]
+          }
+        ],
+        "currencies": [
+          {
+            "ticker": "IOV",
+            "name": "Main token of this chain"
+          }
+        ],
+        "multisig": [
+          {
+            "activation_threshold": 1,
+            "admin_threshold": 1,
+            "participants": [
+              {
+                "signature": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+                "//name": "Cloe",
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "update_validators": {
+          "addresses": [
+            "cond:gov/rule/0000000000000004"
+          ]
+        },
+        "distribution": [
+          {
+            "//name": "unused - owned by economic committee",
+            "admin": "cond:gov/rule/0000000000000002",
+            "destinations": [
+              {
+                "address": "0E95C039EF14EE329D0E09D84F909CF9EB5EF472",
+                "weight": 1
+              }
+            ]
+          }
+        ],
+
+        "escrow": [
+          {
+            "//name": "guarantee fund",
+            "amount": [
+              {
+                "ticker": "IOV",
+                "whole": 1000000
+              }
+            ],
+            "arbiter": "cond:gov/rule/0000000000000002",
+            "destination": "cond:gov/rule/0000000000000002",
+            "//destination": "reward fund - cash account",
+            "source": "0000000000000000000000000000000000000000",
+            "timeout": "2999-12-31T00:00:00Z"
+          }
+        ],
+        "conf": {
+          "username": {
+            "owner": "cond:gov/rule/0000000000000001",
+            "valid_username_name": "^[a-z0-9\\-_.]{3,64}$",
+            "valid_username_label": "^iov$"
+          },
+          "cash": {
+            "collector_address": "cond:gov/rule/0000000000000002",
+            "//collector_address": "reward fond - cash account",
+            "minimal_fee": "0.05 IOV"
+          },
+          "migration": {
+            "admin": "cond:gov/rule/0000000000000003",
+            "//admin": "owned by tech committee"
+          }
+        },
+        "msgfee": [
+          {
+            "fee": "100 IOV",
+            "msg_path": "username/register_token"
+          },
+          {
+            "fee": "10 IOV",
+            "msg_path": "username/change_token_targets"
+          },
+          {
+            "fee": "50 IOV",
+            "msg_path": "username/transfer_token"
+          }
+        ],
+        "governance": {
+          "electorate": [
+            {
+              "title": "Governing Board",
+              "admin": "cond:gov/rule/0000000000000001",
+              "electors": [
+                {
+                  "//name": "Anton",
+                  "weight": 15,
+                  "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+                },
+                {
+                  "//name": "Betty",
+                  "weight": 15,
+                  "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+                },
+                {
+                  "//name": "Cloe",
+                  "weight": 10,
+                  "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                  "//name": "Emily",
+                  "weight": 10,
+                  "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+                }
+              ]
+            },
+            {
+              "title": "Economic Committee",
+              "admin": "cond:gov/rule/0000000000000001",
+              "electors": [
+                {
+                  "//name": "Anton",
+                  "weight": 15,
+                  "address": "CBC76ADED2C9DB439DB4C8D714CF26DAE5229A91"
+                },
+                {
+                  "//name": "Dilip",
+                  "weight": 20,
+                  "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+                },
+                {
+                  "//name": "Gisela",
+                  "weight": 5,
+                  "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+                }
+              ]
+            },
+            {
+              "title": "Tech Committee",
+              "admin": "cond:gov/rule/0000000000000001",
+              "electors": [
+                {
+                  "//name": "Betty",
+                  "weight": 15,
+                  "address": "BB98C9E0EC1DA241BDC8E8ACB3BFBDA4764FAF81"
+                },
+                {
+                  "//name": "Dilip",
+                  "weight": 15,
+                  "address": "EF60B0E41092697F09E034BA5E5C8C6A855C17BA"
+                },
+                {
+                  "//name": "Emily",
+                  "weight": 10,
+                  "address": "DCE021F4ABECB14611255B520C97B3025A07E140"
+                },
+                {
+                  "//name": "Faisal",
+                  "weight": 10,
+                  "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+                }
+              ]
+            },
+            {
+              "title": "Validator Committee",
+              "admin": "cond:gov/rule/0000000000000001",
+              "electors": [
+                {
+                  "//name": "Cloe",
+                  "weight": 15,
+                  "address": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"
+                },
+                {
+                  "//name": "Faisal",
+                  "weight": 10,
+                  "address": "D61DCA7D51C5FB39B29A559D031DB0612E55C32D"
+                },
+                {
+                  "//name": "Giesela",
+                  "weight": 15,
+                  "address": "26C41F243A42A408DA6EC8DC7808FF0A6ABCF5BE"
+                }
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "admin": "cond:gov/rule/0000000000000001",
+              "title": "Governing Board",
+              "voting_period": "5m",
+              "threshold": {
+                "numerator": 2,
+                "denominator": 3
+              },
+              "electorate_id": 1
+            },
+            {
+              "admin": "cond:gov/rule/0000000000000002",
+              "title": "Economic Committee",
+              "voting_period": "5m",
+              "threshold": {
+                "numerator": 1,
+                "denominator": 2
+              },
+              "quorum": {
+                "numerator": 1,
+                "denominator": 2
+              },
+              "electorate_id": 2
+            },
+            {
+              "admin": "cond:gov/rule/0000000000000003",
+              "title": "Tech Committee",
+              "voting_period": "5m",
+              "threshold": {
+                "numerator": 1,
+                "denominator": 2
+              },
+              "electorate_id": 3
+            },
+            {
+              "admin": "cond:gov/rule/0000000000000004",
+              "title": "Validator Committee",
+              "voting_period": "5m",
+              "threshold": {
+                "numerator": 1,
+                "denominator": 2
+              },
+              "quorum": {
+                "numerator": 1,
+                "denominator": 2
+              },
+              "electorate_id": 4
+            }
+          ]
+        },
+        "initialize_schema": [
+          {
+            "pkg": "aswap",
+            "ver": 1
+          },
+          {
+            "pkg": "batch",
+            "ver": 1
+          },
+          {
+            "pkg": "cash",
+            "ver": 1
+          },
+          {
+            "pkg": "cron",
+            "ver": 1
+          },
+          {
+            "pkg": "currency",
+            "ver": 1
+          },
+          {
+            "pkg": "distribution",
+            "ver": 1
+          },
+          {
+            "pkg": "escrow",
+            "ver": 1
+          },
+          {
+            "pkg": "gov",
+            "ver": 1
+          },
+          {
+            "pkg": "hashlock",
+            "ver": 1
+          },
+          {
+            "pkg": "msgfee",
+            "ver": 1
+          },
+          {
+            "pkg": "multisig",
+            "ver": 1
+          },
+          {
+            "pkg": "namecoin",
+            "ver": 1
+          },
+          {
+            "pkg": "username",
+            "ver": 1
+          },
+          {
+            "pkg": "paychan",
+            "ver": 1
+          },
+          {
+            "pkg": "sigs",
+            "ver": 1
+          },
+          {
+            "pkg": "utils",
+            "ver": 1
+          },
+          {
+            "pkg": "validators",
+            "ver": 1
+          }
+        ],
+        "username": [
+          {
+            "username": "cnn.com*iov",
+            "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+            "//name": "Cloe"
+          },
+          {
+            "username": "dave.iov.one*iov",
+            "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E",
+            "//name": "Cloe"
+          },
+          {"username": "atom*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "buggy*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "child*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "driver*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "economy*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "friend*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "girl*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"} ,
+          {"username": "heat*iov", "owner": "BA1DBBA7C4A04F39A98FA5B4DBA8BC6981D7D40E"}
+        ]
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: tm-weaveplaceholder-init-config-2d2mk4km2k
+---
+apiVersion: v1
+data:
+  config.toml: |-
+    # This is a TOML config file.
+    # For more information, see https://github.com/toml-lang/toml
+
+    ##### main base config options #####
+
+    # TCP or UNIX socket address of the ABCI application,
+    # or the name of an ABCI application compiled in with the Tendermint binary
+    proxy_app = "tcp://127.0.0.1:26658"
+
+    # A custom human readable name for this node
+    moniker = "weave_placeholder"
+
+    # If this node is many blocks behind the tip of the chain, FastSync
+    # allows them to catchup quickly by downloading blocks in parallel
+    # and verifying their commits
+    fast_sync = true
+
+    # Database backend: leveldb | memdb | cleveldb
+    db_backend = "leveldb"
+
+    # Database directory
+    db_dir = "data"
+
+    # Output level for logging, including package level options
+    log_level = "main:info,state:info,*:error"
+
+    # Output format: 'plain' (colored text) or 'json'
+    log_format = "plain"
+
+    ##### additional base config options #####
+
+    # Path to the JSON file containing the initial validator set and other meta data
+    genesis_file = "config/genesis.json"
+
+    # Path to the JSON file containing the private key to use as a validator in the consensus protocol
+    priv_validator_key_file = "config/priv_validator_key.json"
+
+    # Path to the JSON file containing the last sign state of a validator
+    priv_validator_state_file = "data/priv_validator_state.json"
+
+    # TCP or UNIX socket address for Tendermint to listen on for
+    # connections from an external PrivValidator process
+    priv_validator_laddr = ""
+
+    # Path to the JSON file containing the private key to use for node authentication in the p2p protocol
+    node_key_file = "config/node_key.json"
+
+    # Mechanism to connect to the ABCI application: socket | grpc
+    abci = "socket"
+
+    # TCP or UNIX socket address for the profiling server to listen on
+    prof_laddr = ""
+
+    # If true, query the ABCI app on connecting to a new peer
+    # so the app can decide if we should keep the connection or not
+    filter_peers = false
+
+    ##### advanced configuration options #####
+
+    ##### rpc server configuration options #####
+    [rpc]
+
+    # TCP or UNIX socket address for the RPC server to listen on
+    laddr = "tcp://0.0.0.0:26657"
+
+    # A list of origins a cross-domain request can be executed from
+    # Default value '[]' disables cors support
+    # Use '["*"]' to allow any origin
+    cors_allowed_origins = ["*"]
+
+    # A list of methods the client is allowed to use with cross-domain requests
+    cors_allowed_methods = ["HEAD", "GET", "POST", ]
+
+    # A list of non simple headers the client is allowed to use with cross-domain requests
+    cors_allowed_headers = ["Origin", "Accept", "Content-Type", "X-Requested-With", "X-Server-Time", ]
+
+    # TCP or UNIX socket address for the gRPC server to listen on
+    # NOTE: This server only supports /broadcast_tx_commit
+    grpc_laddr = ""
+
+    # Maximum number of simultaneous connections.
+    # Does not include RPC (HTTP&WebSocket) connections. See max_open_connections
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
+    # 1024 - 40 - 10 - 50 = 924 = ~900
+    grpc_max_open_connections = 900
+
+    # Activate unsafe RPC commands like /dial_seeds and /unsafe_flush_mempool
+    unsafe = false
+
+    # Maximum number of simultaneous connections (including WebSocket).
+    # Does not include gRPC connections. See grpc_max_open_connections
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    # Should be < {ulimit -Sn} - {MaxNumInboundPeers} - {MaxNumOutboundPeers} - {N of wal, db and other open files}
+    # 1024 - 40 - 10 - 50 = 924 = ~900
+    max_open_connections = 900
+
+    ##### peer to peer configuration options #####
+    [p2p]
+
+    # Address to listen for incoming connections
+    laddr = "tcp://0.0.0.0:26656"
+
+    # Address to advertise to peers for them to dial
+    # If empty, will use the same port as the laddr,
+    # and will introspect on the listener or use UPnP
+    # to figure out the address.
+    external_address = ""
+
+    # Comma separated list of seed nodes to connect to
+    seeds = ""
+
+    # Comma separated list of nodes to keep persistent connections to
+    persistent_peers = ""
+
+    # UPNP port forwarding
+    upnp = false
+
+    # Path to address book
+    addr_book_file = "config/addrbook.json"
+
+    # Set true for strict address routability rules
+    # Set false for private or local networks
+    addr_book_strict = false
+
+    # Maximum number of inbound peers
+    max_num_inbound_peers = 40
+
+    # Maximum number of outbound peers to connect to, excluding persistent peers
+    max_num_outbound_peers = 10
+
+    # Time to wait before flushing messages out on the connection
+    flush_throttle_timeout = "100ms"
+
+    # Maximum size of a message packet payload, in bytes
+    max_packet_msg_payload_size = 1024
+
+    # Rate at which packets can be sent, in bytes/second
+    send_rate = 5120000
+
+    # Rate at which packets can be received, in bytes/second
+    recv_rate = 5120000
+
+    # Set true to enable the peer-exchange reactor
+    pex = false
+
+    # Seed mode, in which node constantly crawls the network and looks for
+    # peers. If another node asks it for addresses, it responds and disconnects.
+    #
+    # Does not work if the peer-exchange reactor is disabled.
+    seed_mode = false
+
+    # Comma separated list of peer IDs to keep private (will not be gossiped to other peers)
+    private_peer_ids = ""
+
+    # Toggle to disable guard against peers connecting from the same ip.
+    allow_duplicate_ip = true
+
+    # Peer connection configuration.
+    handshake_timeout = "20s"
+    dial_timeout = "3s"
+
+    ##### mempool configuration options #####
+    [mempool]
+
+    recheck = true
+    broadcast = true
+    wal_dir = ""
+
+    # size of the mempool
+    size = 5000
+
+    # size of the cache (used to filter transactions we saw earlier)
+    cache_size = 10000
+
+    ##### consensus configuration options #####
+    [consensus]
+
+    wal_file = "data/cs.wal/wal"
+
+    timeout_propose = "3s"
+    timeout_propose_delta = "500ms"
+    timeout_prevote = "1s"
+    timeout_prevote_delta = "500ms"
+    timeout_precommit = "1s"
+    timeout_precommit_delta = "500ms"
+    timeout_commit = "1s"
+
+    # Make progress as soon as we have all the precommits (as if TimeoutCommit = 0)
+    skip_timeout_commit = false
+
+    # EmptyBlocks mode and possible interval between empty blocks
+    create_empty_blocks = true
+    create_empty_blocks_interval = "300s"
+
+    # Reactor sleep duration parameters
+    peer_gossip_sleep_duration = "100ms"
+    peer_query_maj23_sleep_duration = "2s"
+
+    # Block time parameters. Corresponds to the minimum time increment between consecutive blocks.
+    blocktime_iota = "1s"
+
+    ##### transactions indexer configuration options #####
+    [tx_index]
+
+    # What indexer to use for transactions
+    #
+    # Options:
+    #   1) "null"
+    #   2) "kv" (default) - the simplest possible indexer, backed by key-value storage (defaults to levelDB; see DBBackend).
+    indexer = "kv"
+
+    # Comma-separated list of tags to index (by default the only tag is "tx.hash")
+    #
+    # You can also index transactions by height by adding "tx.height" tag here.
+    #
+    # It's recommended to index only a subset of tags due to possible memory
+    # bloat. This is, of course, depends on the indexer's DB and the volume of
+    # transactions.
+    index_tags = ""
+
+    # When set to true, tells indexer to index all tags (predefined tags:
+    # "tx.hash", "tx.height" and all tags from DeliverTx responses).
+    #
+    # Note this may be not desirable (see the comment above). IndexTags has a
+    # precedence over IndexAllTags (i.e. when given both, IndexTags will be
+    # indexed).
+    index_all_tags = true
+
+    ##### instrumentation configuration options #####
+    [instrumentation]
+
+    # When true, Prometheus metrics are served under /metrics on
+    # PrometheusListenAddr.
+    # Check out the documentation for the list of available metrics.
+    prometheus = false
+
+    # Address to listen for Prometheus collector(s) connections
+    prometheus_listen_addr = ":26660"
+
+    # Maximum number of simultaneous connections.
+    # If you want to accept a larger number than the default, make sure
+    # you increase your OS limits.
+    # 0 - unlimited.
+    max_open_connections = 3
+
+    # Instrumentation namespace
+    namespace = "tendermint"
+kind: ConfigMap
+metadata:
+  name: weaveplaceholder-tendermint-config-bkhtdbb6h2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bns-fullnode-seed
+    component: core
+  name: bns-fullnode-seed
+spec:
+  ports:
+  - name: rpc
+    port: 26657
+  selector:
+    app: bns-fullnode-seed
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: bns-fullnode-seed
+    component: core
+  name: bns-fullnode-seed
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bns-fullnode-seed
+  serviceName: bns-fullnode-seed
+  template:
+    metadata:
+      labels:
+        app: bns-fullnode-seed
+        clusterName: bns
+        component: core
+    spec:
+      containers:
+      - args:
+        - -home=/data/bns
+        - start
+        - -bind=unix:///socks/app.sock
+        - -min_fee=0.0001 IOV
+        image: iov1/bnsd:v0.21.0
+        imagePullPolicy: IfNotPresent
+        name: bns
+        securityContext:
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /socks
+          name: socksdir
+        - mountPath: /data/bns
+          name: tmdir
+          subPath: bns
+      - command:
+        - bash
+        - -c
+        - |
+          set -ex
+          exec tendermint node  \
+            --moniker="`hostname`" \
+            --log_level="p2p:info,state:info,*:error" \
+            --proxy_app="unix:///socks/app.sock"
+        image: iov1/tendermint:v0.31.5
+        imagePullPolicy: IfNotPresent
+        name: tendermint
+        ports:
+        - containerPort: 26656
+          name: p2p
+        - containerPort: 26657
+          name: rpc
+        resources:
+          limits:
+            cpu: 1100m
+            memory: 2.5Gi
+          requests:
+            cpu: 750m
+            memory: 1Gi
+        securityContext:
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /data/tendermint/config/config.toml
+          name: tm-configuration
+          readOnly: true
+          subPath: config.toml
+        - mountPath: /data/tendermint/config/genesis.json
+          name: tm-genesis
+          readOnly: true
+          subPath: genesis.json
+        - mountPath: /data/tendermint
+          name: tmdir
+          subPath: tendermint
+        - mountPath: /socks
+          name: socksdir
+        - mountPath: /tmp
+          name: tm-rw-volume
+      initContainers:
+      - args:
+        - |
+          set -exo pipefail
+          if [ ! -f ${TMHOME}/.INITIALISED ]; then
+            mkdir -p /data/bns
+            tendermint init
+            touch ${TMHOME}/.INITIALISED
+          fi
+          rm -f /socks/app.sock
+        command:
+        - bash
+        - -c
+        env:
+        - name: TMHOME
+          value: /data/tendermint
+        image: iov1/tendermint:v0.31.5
+        imagePullPolicy: IfNotPresent
+        name: tm-init
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - mountPath: /data
+          name: tmdir
+        - mountPath: /socks
+          name: socksdir
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 20
+      volumes:
+      - configMap:
+          name: seed-tendermint-config-8ct5h44kc5
+        name: tm-configuration
+      - configMap:
+          name: tm-seed-init-config-6thbbdct5m
+        name: tm-genesis
+      - emptyDir: {}
+        name: socksdir
+      - emptyDir: {}
+        name: tm-rw-volume
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      name: tmdir
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: standard
