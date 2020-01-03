@@ -1,0 +1,211 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: bns-fullnode-xrpc
+  labels:
+    app: bns-fullnode-xrpc
+    component: core
+spec:
+  serviceName: bns-fullnode-xrpc
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bns-fullnode-xrpc
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: bns-fullnode-xrpc
+        component: core
+        clusterName: bns
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "26660"
+    spec:
+      serviceAccountName: bns
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 2000
+        fsGroup: 2000
+      affinity:
+        podAntiAffinity:
+#         do not run 2 fullnodes on the same box due to strict IP config on other nodes they may not connect
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: clusterName
+                    operator: In
+                    values: [bns]
+              topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 20
+      restartPolicy: Always
+      initContainers:
+      - name: tm-init
+        imagePullPolicy: IfNotPresent
+#        image: iov1/tendermint:v0.31.9-iov1
+        image: iov1/tendermint@sha256:b82893d8665bbd59c7d60725b41b4b0b5cfa116991f70311c2c7b1d948c5f8a0
+        env:
+        - name: TMHOME
+          value: /data/tendermint
+        command:
+          - bash
+          - "-c"
+        args:
+          - |
+            set -exo pipefail
+            if [ ! -f ${TMHOME}/.INITIALISED ]; then
+              mkdir -p /data/bns
+              tendermint init
+              touch ${TMHOME}/.INITIALISED
+            fi
+            rm -f /socks/app.sock
+        volumeMounts:
+          - mountPath: /data
+            name: tmdir
+          - mountPath: /socks
+            name: socksdir
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          readOnlyRootFilesystem: true
+      containers:
+      - name: bns
+        imagePullPolicy: IfNotPresent
+#        image: iov1/bnsd:v0.21.2
+        image: iov1/bnsd@sha256:29f83c1a151d5150f1eddd79262d2de7878ab103a3d345c72590af400593d35b
+        args:
+          - -home=/data/bns
+          - start
+          - -bind=unix:///socks/app.sock
+          - '-min_fee=0.0001 IOV'
+        volumeMounts:
+          - name: socksdir
+            mountPath: /socks
+          - name: tmdir
+            mountPath: /data/bns
+            subPath: bns
+        securityContext:
+          readOnlyRootFilesystem: true
+        resources:
+          limits:
+            cpu: 1100m
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+      - name: tendermint
+        imagePullPolicy: IfNotPresent
+#        image: iov1/tendermint:v0.31.9-iov1
+        image: iov1/tendermint@sha256:b82893d8665bbd59c7d60725b41b4b0b5cfa116991f70311c2c7b1d948c5f8a0
+        ports:
+        - containerPort: 26656
+          name: p2p
+        - containerPort: 26657
+          name: rpc
+        - containerPort: 26660
+          name: metric
+        env:
+        - name: PERSISTENT_PEERS
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-fullnode-xrpc-peers
+              key: persistent_peers
+        - name: SEED_NODES
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-fullnode-xrpc-peers
+              key: seed_nodes
+        - name: PRIVATE_PEERS
+          valueFrom:
+            configMapKeyRef:
+              name: tm-bns-fullnode-xrpc-peers
+              key: private_peers
+        - name: TMHOME
+          value: /data/tendermint
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          # for snapshsots
+          # if [ -f ${TMHOME}/config/addrbook.json ]; then
+          #  rm -f ${TMHOME}/config/addrbook.json
+          # fi
+          # chmod -fR g-rwx /data/tendermint/data/
+          exec tendermint node --p2p.persistent_peers="$persistent_peers" \
+            --p2p.persistent_peers="$PERSISTENT_PEERS" \
+            --p2p.private_peer_ids="$PRIVATE_PEERS" \
+            --p2p.seeds="$SEED_NODES" \
+            --moniker="`hostname`" \
+            --log_level="p2p:info,state:info,*:error" \
+            --proxy_app="unix:///socks/app.sock"
+        volumeMounts:
+        - mountPath: /data/tendermint/config/config.toml
+          name: tm-configuration
+          subPath: config.toml
+          readOnly: true
+        - mountPath: /data/tendermint/config/genesis.json
+          name: tm-genesis
+          subPath: genesis.json
+          readOnly: true
+        - name: tmdir
+          mountPath: /data/tendermint
+          subPath: tendermint
+        - name: socksdir
+          mountPath: /socks
+        - name: tm-rw-volume
+          mountPath: /tmp
+        securityContext:
+          readOnlyRootFilesystem: true
+        resources:
+          limits:
+            cpu: 1100m
+            memory: 2.5Gi
+          requests:
+            cpu: 750m
+            memory: 1Gi
+      volumes:
+      - name: tm-configuration
+        configMap:
+          name: bns-fullnode-xrpc-tendermint-config
+      - name: tm-genesis
+        configMap:
+          name: tm-genesis
+      - name: socksdir
+        emptyDir: {}
+      - name: tm-rw-volume
+        emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: tmdir
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 150Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bns-fullnode-xrpc
+  labels:
+    app: bns-fullnode-xrpc
+    component: core
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  ports:
+  - port: 26657
+    name: rpc
+  selector:
+    app: bns-fullnode-xrpc

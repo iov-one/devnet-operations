@@ -9,6 +9,7 @@ spec:
     name: rpc
   selector:
     app: weaveplaceholder
+  type: LoadBalancer
 ---
 # A loadbalancer service allows to expose the pods ports to the outside world via an IP
 apiVersion: v1
@@ -41,15 +42,6 @@ spec:
       labels:
         app: weaveplaceholder
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values: [weaveplaceholder]
-            topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       initContainers:
       - args:
@@ -145,7 +137,7 @@ spec:
           
           exec tendermint node \
             --moniker="`hostname`" \
-            --log_level="p2p:info,state:info,*:error" \
+            --log_level="*:debug" \
             --proxy_app="unix:///socks/app.sock"
         volumeMounts:
         - name: tmdir

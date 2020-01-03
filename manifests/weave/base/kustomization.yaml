@@ -1,7 +1,8 @@
 # a list of all the manifests required, make sure to add a file here if you add it to
 # this folder
 resources:
-  - validator.yaml
+#  - validator.yaml
+  - seed.yaml
 # generating config maps is as easy as specifying a filename for files and literals key=val
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
@@ -12,3 +13,9 @@ configMapGenerator:
 - name: tm-weaveplaceholder-init-config
   files: 
   - genesis.json
+- name: seed-tendermint-config
+  files: 
+  - config-seed.toml
+- name: tm-seed-init-genesis
+  files: 
+  - genesis-seed.json
