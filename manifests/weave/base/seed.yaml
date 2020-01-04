@@ -99,8 +99,9 @@ spec:
         - "-c"
         - |
           set -ex
+          nodeid=`curl weaveplaceholder-rpc:26657/status | jq -r '.result.node_info.id'`;
           exec tendermint node  \
-            --p2p.persistent_peers="weaveplaceholder-p2p:26656" \
+            --p2p.persistent_peers="$nodeid@weaveplaceholder-p2p:26656" \
             --moniker="`hostname`" \
             --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
