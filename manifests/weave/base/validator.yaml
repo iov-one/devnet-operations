@@ -137,7 +137,7 @@ spec:
           
           exec tendermint node \
             --moniker="`hostname`" \
-            --log_level="*:debug" \
+            --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
         volumeMounts:
         - name: tmdir
@@ -191,10 +191,10 @@ spec:
       volumes:
       - name: tm-initialization
         configMap:
-          name: tm-weaveplaceholder-init-config
+          name: validator-genesis
       - name: tm-configuration
         configMap:
-          name: weaveplaceholder-tendermint-config
+          name: validator-config
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume
