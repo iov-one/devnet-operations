@@ -2,7 +2,7 @@
 # this folder
 resources:
   - validator.yaml
-#  - seed.yaml
+  - seed.yaml
 # generating config maps is as easy as specifying a filename for files and literals key=val
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
