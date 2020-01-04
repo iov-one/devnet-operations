@@ -39,7 +39,7 @@ spec:
             if [ ! -f ${TMHOME}/.INITIALISED ]; then
               mkdir -p /data/bns
               tendermint init
-              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+              curl -s weaveplaceholder-rpc:26657/genesis | jq ".result.genesis" > ${TMHOME}/config/genesis.json
               cp -f /etc/tendermint/config.toml ${TMHOME}/config/config.toml
               touch ${TMHOME}/.INITIALISED
             fi
@@ -100,6 +100,7 @@ spec:
         - |
           set -ex
           exec tendermint node  \
+            --p2p.persistent_peers="weaveplaceholder-p2p:26656" \
             --moniker="`hostname`" \
             --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
@@ -144,13 +145,25 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: bns-fullnode-seed
-  labels:
-    app: bns-fullnode-seed
-    component: core
+  name: bns-fullnode-seed-rpc
 spec:
   ports:
     - port: 26657
       name: rpc
+      targetPort: 26657
   selector:
     app: bns-fullnode-seed
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bns-fullnode-seed-p2p
+spec:
+  ports:
+    - port: 26656
+      name: rpc
+      targetPort: 26656
+  selector:
+    app: bns-fullnode-seed
+  type: NodePort
