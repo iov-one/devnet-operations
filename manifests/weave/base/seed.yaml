@@ -39,6 +39,8 @@ spec:
             if [ ! -f ${TMHOME}/.INITIALISED ]; then
               mkdir -p /data/bns
               tendermint init
+              cp -f /etc/tendermint/genesis.json ${TMHOME}/config/genesis.json
+              cp -f /etc/tendermint/config.toml ${TMHOME}/config/config.toml
               touch ${TMHOME}/.INITIALISED
             fi
             rm -f /socks/app.sock
@@ -47,6 +49,14 @@ spec:
             name: tmdir
           - mountPath: /socks
             name: socksdir
+          - mountPath: /etc/tendermint/genesis.json
+            name: tm-genesis
+            readOnly: true
+            subPath: genesis.json
+          - mountPath: /etc/tendermint/config.toml
+            name: tm-configuration
+            readOnly: true
+            subPath: config.toml
         resources:
           limits:
             cpu: 150m
@@ -81,6 +91,9 @@ spec:
           name: p2p
         - containerPort: 26657
           name: rpc
+        env:
+        - name: TMHOME
+          value: /data/tendermint
         command:
         - bash
         - "-c"
@@ -91,14 +104,6 @@ spec:
             --log_level="p2p:info,state:info,*:error" \
             --proxy_app="unix:///socks/app.sock"
         volumeMounts:
-        - mountPath: /data/tendermint/config/config.toml
-          name: tm-configuration
-          subPath: config.toml
-          readOnly: true
-        - mountPath: /data/tendermint/config/genesis.json
-          name: tm-genesis
-          subPath: genesis.json
-          readOnly: true
         - name: tmdir
           mountPath: /data/tendermint
           subPath: tendermint
@@ -118,10 +123,10 @@ spec:
       volumes:
       - name: tm-configuration
         configMap:
-          name: seed-tendermint-config
+          name: seed-config
       - name: tm-genesis
         configMap:
-          name: tm-seed-init-config
+          name: seed-genesis
       - name: socksdir
         emptyDir: {}
       - name: tm-rw-volume
@@ -132,7 +137,6 @@ spec:
     spec:
       accessModes:
         - ReadWriteOnce
-      storageClassName: standard
       resources:
         requests:
           storage: 1Gi

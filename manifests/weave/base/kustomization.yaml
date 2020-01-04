@@ -7,15 +7,15 @@ resources:
 # config names for files are automatically generated from their names
 # e.g. config.toml is going to end up as config.toml in a configmap when you need to reference it
 configMapGenerator:
-- name: weaveplaceholder-tendermint-config
+- name: val-config
   files: 
   - validator/config.toml
-- name: tm-weaveplaceholder-init-config
+- name: val-genesis
   files: 
   - validator/genesis.json
-- name: seed-tendermint-config
+- name: seed-config
   files: 
   - seed/config.toml
-- name: tm-seed-init-config
+- name: seed-genesis
   files: 
   - seed/genesis.json
