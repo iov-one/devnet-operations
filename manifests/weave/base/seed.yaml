@@ -35,6 +35,14 @@ spec:
           - "-c"
         args:
           - |
+            set -x
+            set +e
+            chainid=`curl -s --fail weaveplaceholder-rpc:26657/genesis | jq -r '.result.genesis.chain_id'`;
+            while [ "$chainid" != "iov-boarnet" ]; do
+              sleep 5;
+              chainid=`curl -s --fail weaveplaceholder-rpc:26657/genesis | jq -r '.result.genesis.chain_id'`;
+            done 
+            sleep 20; 
             set -exo pipefail
             if [ ! -f ${TMHOME}/.INITIALISED ]; then
               mkdir -p /data/bns
