@@ -141,7 +141,9 @@ spec:
           exec tendermint node \
             --moniker="`hostname`" \
             --log_level="p2p:info,state:info,*:error" \
-            --proxy_app="unix:///socks/app.sock"
+            --proxy_app="unix:///socks/app.sock" \
+            --rpc.laddr=tcp://127.0.0.1:26657 \
+            --rpc.unsafe=true
         volumeMounts:
         - name: tmdir
           mountPath: /data/tendermint
