@@ -1,0 +1,35 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: bns
+  labels:
+    app: bns
+spec:
+  podSelector:
+    matchLabels:
+      app: bns
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            clusterName: bns
+  - ports:
+    - port: 26656
+    from:
+      - ipBlock:
+          cidr: '0.0.0.0/0'
+  - ports:
+    - port: 26657
+    from:
+      - podSelector:
+          matchLabels:
+            app: faucet
+  - ports:
+    - port: 26660
+    from:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+          component: core

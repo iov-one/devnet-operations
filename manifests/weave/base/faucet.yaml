@@ -12,6 +12,12 @@ spec:
       labels:
         app: faucet
     spec:
+      serviceAccountName: bns
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 2000
+        fsGroup: 2000
       containers:
       - name: faucet
         image: iov1/iov-faucet:v0.5.1
@@ -25,7 +31,7 @@ spec:
               name: faucet-settings
               key: FAUCET_MNEMONIC
         - name: FAUCET_CREDIT_AMOUNT_IOV
-          value: '10'
+          value: '20'
         - name: FAUCET_REFILL_FACTOR
           value: '8'
         - name: FAUCET_REFILL_THRESHOLD
@@ -33,7 +39,7 @@ spec:
         args:
           - start
           - bns
-          - ws://weave_placeholder.default.svc.cluster.local:26657
+          - ws://bns.default.svc.cluster.local:26657
         ports:
         - name: http
           containerPort: 8080
