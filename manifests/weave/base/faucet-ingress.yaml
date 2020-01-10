@@ -6,13 +6,13 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
     prometheus.io/probe: "true"
   labels:
-    traffik-type: private
+    traffic-type: private
     app: faucet
 spec:
   rules:
-  - host: faucet.example.com
+  - host: faucet.x-dancenet.iov.one
     http:
       paths:
       - backend:
           serviceName: faucet
-          servicePort: http
+          servicePort: 8080
